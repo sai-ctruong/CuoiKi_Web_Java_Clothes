@@ -1,0 +1,915 @@
+/*
+ * Clothing Shop - Main Stylesheet
+ * Custom CSS overriding Bootstrap 5
+ * Author: Senior Java Web Developer
+ * Vietnamese Font Support
+ */
+
+/* ============================================
+   1. CSS VARIABLES & ROOT SETTINGS
+============================================ */
+:root {
+    /* Primary Colors - Dark Theme */
+    --primary-color: #1a1a2e;
+    --primary-light: #232946;
+    --primary-dark: #0d0d14;
+    
+    /* Accent Colors */
+    --accent-color: #d4a24c;
+    --accent-hover: #e5b75d;
+    --accent-dark: #b8892d;
+    
+    /* Text Colors */
+    --text-white: #ffffff;
+    --text-light: #b8b8b8;
+    --text-muted: #8a8a8a;
+    --text-dark: #1a1a2e;
+    
+    /* Background Colors */
+    --bg-dark: #1a1a2e;
+    --bg-darker: #12121f;
+    --bg-light: #f8f9fa;
+    --bg-cream: #faf8f5;
+    
+    /* Shadows */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.15);
+    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.2);
+    --shadow-card-hover: 0 20px 50px rgba(212, 162, 76, 0.25);
+    
+    /* Transitions */
+    --transition-fast: all 0.2s ease;
+    --transition-normal: all 0.3s ease;
+    --transition-slow: all 0.5s ease;
+    
+    /* Border Radius */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 24px;
+}
+
+/* ============================================
+   2. BASE STYLES & TYPOGRAPHY
+============================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--text-dark);
+    background-color: var(--text-white);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Cormorant Garamond', 'Times New Roman', Georgia, serif;
+    font-weight: 500;
+    line-height: 1.2;
+    color: var(--text-dark);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition-fast);
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Selection Style */
+::selection {
+    background: var(--accent-color);
+    color: var(--text-white);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--accent-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-hover);
+}
+
+/* ============================================
+   3. HERO SECTION - Style theo mẫu
+============================================ */
+.hero-section {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    background-color: var(--bg-dark);
+}
+
+.hero-bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('https://images.unsplash.com/photo-1449824913935-59a10b8d2000?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    filter: grayscale(50%);
+}
+
+.hero-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to right,
+        rgba(26, 26, 46, 0.95) 0%,
+        rgba(26, 26, 46, 0.85) 40%,
+        rgba(26, 26, 46, 0.6) 70%,
+        rgba(26, 26, 46, 0.4) 100%
+    );
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    color: var(--text-white);
+    padding: 2rem 0;
+}
+
+.hero-badge {
+    display: inline-block;
+    color: var(--accent-color);
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 1.5rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.hero-title {
+    margin-bottom: 1.5rem;
+}
+
+.hero-title .title-line {
+    display: block;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(3rem, 7vw, 5rem);
+    font-weight: 500;
+    font-style: italic;
+    line-height: 1.1;
+    color: var(--text-white);
+}
+
+.hero-description {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--text-light);
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+/* ============================================
+   4. BUTTONS
+============================================ */
+.btn-primary-custom {
+    background: var(--accent-color);
+    border: none;
+    color: var(--text-dark);
+    padding: 0.9rem 2rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: var(--transition-normal);
+}
+
+.btn-primary-custom:hover {
+    background: var(--accent-hover);
+    color: var(--text-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(212, 162, 76, 0.3);
+}
+
+.btn-outline-custom {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: var(--text-white);
+    padding: 0.9rem 2rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: var(--transition-normal);
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-outline-custom:hover {
+    background: var(--text-white);
+    border-color: var(--text-white);
+    color: var(--text-dark);
+}
+
+.btn-outline-custom i {
+    font-size: 1.1rem;
+}
+
+.btn-view-all {
+    background: var(--text-dark);
+    color: var(--text-white);
+    padding: 1rem 2.5rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: var(--transition-normal);
+}
+
+.btn-view-all:hover {
+    background: var(--accent-color);
+    color: var(--text-dark);
+    transform: translateY(-2px);
+}
+
+/* ============================================
+   5. SECTION STYLES
+============================================ */
+.section-header {
+    margin-bottom: 3.5rem;
+}
+
+.section-badge {
+    display: inline-block;
+    color: var(--accent-color);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 0.75rem;
+}
+
+.section-title {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 500;
+    font-style: italic;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.section-description {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    font-weight: 400;
+    max-width: 550px;
+    margin: 0 auto;
+}
+
+.bg-light-custom {
+    background: var(--bg-cream);
+}
+
+/* ============================================
+   6. PRODUCT CARDS
+============================================ */
+.product-card {
+    position: relative;
+    background: var(--text-white);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Card Hover Effect - Nổi lên */
+.product-card:hover {
+    transform: translateY(-12px);
+    box-shadow: var(--shadow-card-hover);
+}
+
+.product-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3/4;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-slow);
+}
+
+/* Image Zoom Effect on Hover */
+.product-card:hover .product-image {
+    transform: scale(1.08);
+}
+
+/* Product Badge */
+.product-badge {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 2;
+}
+
+.badge-sale {
+    background: #dc3545;
+    color: var(--text-white);
+}
+
+.badge-new {
+    background: #28a745;
+    color: var(--text-white);
+}
+
+.badge-hot {
+    background: var(--accent-color);
+    color: var(--text-dark);
+}
+
+/* Quick Actions */
+.product-actions {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    opacity: 0;
+    transform: translateX(15px);
+    transition: var(--transition-normal);
+    z-index: 2;
+}
+
+.product-card:hover .product-actions {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.action-btn {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: var(--text-white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+    box-shadow: var(--shadow-sm);
+    font-size: 0.9rem;
+    color: var(--text-dark);
+}
+
+.action-btn:hover {
+    background: var(--accent-color);
+    color: var(--text-dark);
+    transform: scale(1.1);
+}
+
+/* Add to Cart Button */
+.btn-add-cart {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 0.85rem;
+    background: var(--bg-dark);
+    color: var(--text-white);
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.75rem;
+    transform: translateY(100%);
+    transition: var(--transition-normal);
+}
+
+.product-card:hover .btn-add-cart {
+    transform: translateY(0);
+}
+
+.btn-add-cart:hover {
+    color: var(--text-white);
+    background: var(--accent-color);
+    color: var(--text-dark);
+}
+
+/* Product Info */
+.product-info {
+    padding: 1.25rem;
+}
+
+.product-category {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.4rem;
+}
+
+.product-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.6rem;
+    color: var(--text-dark);
+}
+
+.product-title a:hover {
+    color: var(--accent-color);
+}
+
+.product-rating {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    margin-bottom: 0.6rem;
+}
+
+.product-rating i {
+    color: var(--accent-color);
+    font-size: 0.8rem;
+}
+
+.rating-count {
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    margin-left: 0.4rem;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.product-price {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.current-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--accent-dark);
+}
+
+.original-price {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-decoration: line-through;
+}
+
+/* ============================================
+   7. CATEGORY CARDS
+============================================ */
+.category-card {
+    position: relative;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    height: 280px;
+    cursor: pointer;
+}
+
+.category-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition-slow);
+}
+
+.category-card:hover img {
+    transform: scale(1.08);
+}
+
+.category-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(to top, rgba(26, 26, 46, 0.85) 0%, transparent 60%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+    color: var(--text-white);
+}
+
+.category-overlay h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--text-white);
+    font-size: 1.4rem;
+    font-weight: 500;
+    font-style: italic;
+    margin-bottom: 0.75rem;
+}
+
+.btn-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--text-white);
+    color: var(--text-dark);
+    padding: 0.6rem 1.25rem;
+    border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition-normal);
+    width: fit-content;
+}
+
+.btn-category:hover {
+    background: var(--accent-color);
+    color: var(--text-dark);
+    transform: translateX(5px);
+}
+
+/* ============================================
+   8. FEATURES SECTION
+============================================ */
+.feature-card {
+    text-align: center;
+    padding: 2rem 1.25rem;
+    background: var(--text-white);
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.feature-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+    width: 70px;
+    height: 70px;
+    background: var(--bg-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.25rem;
+}
+
+.feature-icon i {
+    font-size: 1.6rem;
+    color: var(--accent-color);
+}
+
+.feature-card h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+    color: var(--text-dark);
+}
+
+.feature-card p {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* ============================================
+   9. NEWSLETTER SECTION
+============================================ */
+.newsletter-section {
+    background: var(--bg-dark);
+}
+
+.newsletter-wrapper {
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-dark) 100%);
+    border-radius: var(--radius-lg);
+    padding: 3.5rem;
+}
+
+.newsletter-wrapper h3 {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    color: var(--text-dark);
+    font-size: 1.8rem;
+    font-weight: 600;
+    font-style: italic;
+    margin-bottom: 0.4rem;
+}
+
+.newsletter-wrapper p {
+    font-family: 'Montserrat', sans-serif;
+    color: rgba(26, 26, 46, 0.8);
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.newsletter-form .form-control {
+    font-family: 'Montserrat', sans-serif;
+    padding: 0.9rem 1.25rem;
+    border: none;
+    border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+    font-size: 0.9rem;
+}
+
+.newsletter-form .form-control:focus {
+    box-shadow: none;
+}
+
+.btn-subscribe {
+    background: var(--text-dark);
+    color: var(--text-white);
+    padding: 0.9rem 1.75rem;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    white-space: nowrap;
+    transition: var(--transition-normal);
+}
+
+.btn-subscribe:hover {
+    background: var(--primary-dark);
+    color: var(--text-white);
+}
+
+/* ============================================
+   10. FOOTER STYLES
+============================================ */
+.footer {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    padding: 4rem 0 0;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.footer h5,
+.footer h6 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--text-white);
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.25rem;
+}
+
+.footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-white);
+    margin-bottom: 1rem;
+}
+
+.footer-logo i {
+    color: var(--accent-color);
+    font-size: 1.5rem;
+}
+
+.footer p {
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: var(--text-muted);
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.6rem;
+}
+
+.footer-links a {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    transition: var(--transition-fast);
+}
+
+.footer-links a:hover {
+    color: var(--accent-color);
+    padding-left: 5px;
+}
+
+.footer-contact li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+}
+
+.footer-contact i {
+    color: var(--accent-color);
+    font-size: 1rem;
+    margin-top: 2px;
+}
+
+.footer-social {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+}
+
+.footer-social a {
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-white);
+    transition: var(--transition-fast);
+}
+
+.footer-social a:hover {
+    background: var(--accent-color);
+    color: var(--text-dark);
+}
+
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem 0;
+    margin-top: 3rem;
+}
+
+.footer-bottom p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.footer-bottom a {
+    color: var(--accent-color);
+}
+
+/* ============================================
+   11. ANIMATIONS
+============================================ */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* ============================================
+   12. RESPONSIVE STYLES
+============================================ */
+@media (max-width: 991.98px) {
+    .hero-section {
+        min-height: auto;
+        padding: 7rem 0 4rem;
+    }
+    
+    .hero-overlay {
+        background: rgba(26, 26, 46, 0.85);
+    }
+    
+    .newsletter-wrapper {
+        padding: 2.5rem;
+        text-align: center;
+    }
+    
+    .newsletter-form {
+        margin-top: 1.5rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-title .title-line {
+        font-size: 2.5rem;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .hero-buttons .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .newsletter-form .input-group {
+        flex-direction: column;
+    }
+    
+    .newsletter-form .form-control {
+        border-radius: var(--radius-sm);
+        margin-bottom: 0.75rem;
+    }
+    
+    .btn-subscribe {
+        border-radius: var(--radius-sm);
+        width: 100%;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .section-header {
+        margin-bottom: 2rem;
+    }
+    
+    .product-info {
+        padding: 1rem;
+    }
+    
+    .current-price {
+        font-size: 1rem;
+    }
+    
+    .category-card {
+        height: 220px;
+    }
+}
+
+/* ============================================
+   13. UTILITY CLASSES
+============================================ */
+.text-accent {
+    color: var(--accent-color) !important;
+}
+
+.bg-accent {
+    background: var(--accent-color) !important;
+}
+
+.bg-dark-custom {
+    background: var(--bg-dark) !important;
+}
