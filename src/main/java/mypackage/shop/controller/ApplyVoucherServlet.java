@@ -1,6 +1,9 @@
 /*
  * (Xử lý áp dụng mã giảm giá)
  */
+
+//Author: Hoai
+
 package mypackage.shop.controller;
 
 import jakarta.servlet.ServletException;
@@ -16,10 +19,6 @@ import mypackage.shop.dao.VoucherDAO;
 import mypackage.shop.model.Cart;
 import mypackage.shop.model.Voucher;
 
-/**
- *
- * @author PC
- */
 @WebServlet(name = "ApplyVoucherServlet", urlPatterns = {"/cart/apply-voucher"})
 public class ApplyVoucherServlet extends HttpServlet {
 

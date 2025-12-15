@@ -1,6 +1,9 @@
 /*
  * (Xóa sản phẩm khỏi giỏ)
  */
+
+//Author: Hoai
+
 package mypackage.shop.controller;
 
 import jakarta.servlet.ServletException;
@@ -12,10 +15,6 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import mypackage.shop.model.Cart;
 
-/**
- *
- * @author PC
- */
 @WebServlet(name = "RemoveCartServlet", urlPatterns = {"/cart/remove"})
 public class RemoveCartServlet extends HttpServlet {
 
@@ -33,9 +32,6 @@ public class RemoveCartServlet extends HttpServlet {
                 if (cart != null) {
                     cart.removeItem(productId);
                     session.setAttribute("cart", cart); // Ensure session update
-                    
-                    // Optional: Set a success message
-                    // session.setAttribute("successMessage", "Đã xóa sản phẩm khỏi giỏ hàng.");
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();

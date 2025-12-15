@@ -2,6 +2,9 @@
  * (Lớp bao gồm list các CartItem và tổng tiền)
  * Session-based cart for shopping
  */
+
+//Author: Hoai
+
 package mypackage.shop.model;
 
 import java.io.Serializable;
@@ -9,10 +12,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author PC
- */
 public class Cart implements Serializable {
     private List<SessionCartItem> items;
     

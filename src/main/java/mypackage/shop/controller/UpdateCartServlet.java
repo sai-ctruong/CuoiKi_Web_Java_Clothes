@@ -1,6 +1,9 @@
 /*
  * (Tăng giảm số lượng)
  */
+
+//Author: Hoai
+
 package mypackage.shop.controller;
 
 import jakarta.servlet.ServletException;
@@ -12,10 +15,6 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import mypackage.shop.model.Cart;
 
-/**
- *
- * @author PC
- */
 @WebServlet(name = "UpdateCartServlet", urlPatterns = {"/cart/update"})
 public class UpdateCartServlet extends HttpServlet {
 

@@ -1,6 +1,9 @@
 /*
  * (Lấy list sản phẩm, chi tiết, tìm kiếm, lọc)
  */
+
+//Author: Hoai
+
 package mypackage.shop.dao;
 
 import java.sql.Connection;
@@ -12,10 +15,6 @@ import mypackage.shop.model.Brand;
 import mypackage.shop.model.Category;
 import mypackage.shop.model.Product;
 
-/**
- *
- * @author PC
- */
 public class ProductDAO {
     
     private DBContext dbContext;

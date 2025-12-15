@@ -1,19 +1,17 @@
 /*
  * (Check mã giảm giá)
  */
+
+//Author: Hoai
+
 package mypackage.shop.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDateTime;
 import mypackage.shop.model.Voucher;
 
-/**
- *
- * @author PC
- */
 public class VoucherDAO {
 
     private DBContext dbContext;

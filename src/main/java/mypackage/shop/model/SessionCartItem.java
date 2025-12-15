@@ -1,15 +1,13 @@
 /*
  * Session-based CartItem (simplified version for shopping cart)
  */
+//Author: Hoai
+
 package mypackage.shop.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- *
- * @author PC
- */
 public class SessionCartItem implements Serializable {
     private Product product;
     private Integer quantity;

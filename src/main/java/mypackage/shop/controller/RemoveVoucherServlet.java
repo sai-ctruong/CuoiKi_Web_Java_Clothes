@@ -1,6 +1,9 @@
 /*
  * (Xóa mã giảm giá)
  */
+
+//Author: Hoai
+
 package mypackage.shop.controller;
 
 import jakarta.servlet.ServletException;
@@ -21,24 +24,19 @@ import mypackage.shop.model.Cart;
 public class RemoveVoucherServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        System.out.println("RemoveVoucherServlet: Request received.");
+            throws ServletException, IOException {    
         
         HttpSession session = request.getSession();
         Cart cart = (Cart) session.getAttribute("cart");
         
         if (cart != null) {
-            System.out.println("RemoveVoucherServlet: Removing voucher from cart.");
             cart.setVoucher(null); // Remove voucher
             session.setAttribute("cart", cart); // Update session
             
             // Set message
             session.setAttribute("voucherMessage", "Đã hủy mã giảm giá");
             session.setAttribute("voucherStatus", "success");
-        } else {
-             System.out.println("RemoveVoucherServlet: Cart is null.");
-        }
+        } 
         
         // Redirect back to cart
         response.sendRedirect(request.getContextPath() + "/cart");
