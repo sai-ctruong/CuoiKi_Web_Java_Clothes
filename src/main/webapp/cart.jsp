@@ -142,20 +142,43 @@
                                         <span>Phí vận chuyển:</span>
                                         <span>Miễn phí</span>
                                     </section>
+                                    <section class="summary-row" id="discount-row"
+                                        style="${empty sessionScope.cart.voucher ? 'display: none;' : ''}">
+                                        <span>Giảm giá:</span>
+                                        <span class="text-danger" id="discount-amount">
+                                            <c:if test="${not empty sessionScope.cart.voucher}">
+                                                -
+                                                <fmt:formatNumber value="${sessionScope.cart.discountAmount}"
+                                                    type="number" maxFractionDigits="0" /> đ
+                                            </c:if>
+                                        </span>
+                                    </section>
 
                                     <!-- Voucher Box -->
                                     <section class="mb-3 mt-3">
                                         <section class="input-group">
-                                            <input type="text" class="form-control" placeholder="Mã giảm giá/Voucher"
-                                                aria-label="Mã giảm giá">
-                                            <button class="btn btn-outline-primary" type="button">Áp dụng</button>
+                                            <input type="text" class="form-control" id="voucherCode"
+                                                placeholder="Mã giảm giá/Voucher" aria-label="Mã giảm giá"
+                                                value="${sessionScope.cart.voucher.code}"
+                                                oninput="checkVoucherInput(this)">
+                                            <button class="btn btn-outline-primary" type="button"
+                                                onclick="applyCartVoucher()">Áp dụng</button>
                                         </section>
+                                        <div id="voucher-message" class="form-text mt-1"></div>
                                     </section>
+
                                     <section class="summary-row">
                                         <span>Tổng cộng:</span>
-                                        <span>
-                                            <fmt:formatNumber value="${cartTotal}" type="number"
-                                                maxFractionDigits="0" /> đ
+                                        <span id="final-total">
+                                            <c:choose>
+                                                <c:when test="${not empty sessionScope.cart}">
+                                                    <fmt:formatNumber value="${sessionScope.cart.finalTotal}"
+                                                        type="number" maxFractionDigits="0" /> đ
+                                                </c:when>
+                                                <c:otherwise>
+                                                    0 đ
+                                                </c:otherwise>
+                                            </c:choose>
                                         </span>
                                     </section>
 
@@ -199,6 +222,125 @@
 
                     function checkout() {
                         window.location.href = '${pageContext.request.contextPath}/checkout';
+                    }
+
+                    function checkVoucherInput(input) {
+                        if (input.value.trim() === "") {
+                            removeCartVoucher();
+                        }
+                    }
+
+                    function removeCartVoucher() {
+                        console.log("Removing voucher...");
+                        fetch('${pageContext.request.contextPath}/cart/remove-voucher', {
+                            method: 'POST'
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                if (data.status === 'success') {
+                                    // Hide discount row
+                                    const discountRow = document.getElementById('discount-row');
+                                    if (discountRow) discountRow.style.display = 'none'; // Or 'style', but we used 'display: none' in JSP
+
+                                    // Reset total
+                                    const finalTotalSpan = document.getElementById('final-total');
+                                    const formatCurrency = (val) => {
+                                        return new Intl.NumberFormat('vi-VN').format(val) + ' đ';
+                                    };
+                                    if (finalTotalSpan) {
+                                        finalTotalSpan.innerText = formatCurrency(data.finalTotal);
+                                    }
+
+                                    // Clear message
+                                    const messageDiv = document.getElementById('voucher-message');
+                                    if (messageDiv) {
+                                        messageDiv.innerText = '';
+                                        messageDiv.className = 'form-text mt-1';
+                                    }
+                                }
+                            })
+                            .catch(err => console.error("Error removing voucher:", err));
+                    }
+
+                    function applyCartVoucher() {
+                        console.log("applyCartVoucher called");
+                        const codeInput = document.getElementById('voucherCode');
+                        const code = codeInput ? codeInput.value : '';
+                        const messageDiv = document.getElementById('voucher-message');
+
+                        // Reset message
+                        if (messageDiv) {
+                            messageDiv.className = 'form-text mt-1';
+                            messageDiv.innerText = '';
+                        }
+
+                        if (!code || code.trim() === '') {
+                            if (messageDiv) {
+                                messageDiv.innerText = 'Vui lòng nhập mã giảm giá';
+                                messageDiv.className = 'form-text mt-1 text-danger';
+                            } else {
+                                alert('Vui lòng nhập mã giảm giá');
+                            }
+                            return;
+                        }
+
+                        console.log("Sending voucher code: " + code);
+
+                        fetch('${pageContext.request.contextPath}/cart/apply-voucher', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: 'code=' + encodeURIComponent(code)
+                        })
+                            .then(res => res.json())
+                            .then(data => {
+                                console.log("Response:", data);
+                                if (data.status === 'success') {
+                                    if (messageDiv) {
+                                        messageDiv.innerText = data.message;
+                                        messageDiv.className = 'form-text mt-1 text-success';
+                                    } else {
+                                        alert(data.message);
+                                    }
+
+                                    // Update Discount Row
+                                    const discountRow = document.getElementById('discount-row');
+                                    const discountAmountSpan = document.getElementById('discount-amount');
+                                    const finalTotalSpan = document.getElementById('final-total');
+
+                                    if (discountRow) discountRow.style.display = 'flex';
+
+                                    const formatCurrency = (val) => {
+                                        return new Intl.NumberFormat('vi-VN').format(val) + ' đ';
+                                    };
+
+                                    if (discountAmountSpan) {
+                                        discountAmountSpan.innerText = '- ' + formatCurrency(data.discountAmount);
+                                    }
+
+                                    if (finalTotalSpan) {
+                                        finalTotalSpan.innerText = formatCurrency(data.finalTotal);
+                                    }
+
+                                } else {
+                                    if (messageDiv) {
+                                        messageDiv.innerText = data.message;
+                                        messageDiv.className = 'form-text mt-1 text-danger';
+                                    } else {
+                                        alert(data.message);
+                                    }
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Error applying voucher:", err);
+                                if (messageDiv) {
+                                    messageDiv.innerText = 'Có lỗi xảy ra khi áp dụng mã (Check console).';
+                                    messageDiv.className = 'form-text mt-1 text-danger';
+                                } else {
+                                    alert('Có lỗi xảy ra khi kết nối server');
+                                }
+                            });
                     }
                 </script>
             </body>

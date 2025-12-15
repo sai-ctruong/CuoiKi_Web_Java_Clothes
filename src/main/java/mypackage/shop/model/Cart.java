@@ -92,7 +92,47 @@ public class Cart implements Serializable {
         return items.isEmpty();
     }
     
+    private Voucher voucher;
+
+    public void setVoucher(Voucher voucher) {
+        this.voucher = voucher;
+    }
+
+    public Voucher getVoucher() {
+        return voucher;
+    }
+
+    public BigDecimal getDiscountAmount() {
+        if (voucher == null) {
+            return BigDecimal.ZERO;
+        }
+
+        BigDecimal total = getTotalPrice();
+        
+        // Calculate discount based on percent
+        if (voucher.getDiscountPercent() != null && voucher.getDiscountPercent() > 0) {
+            BigDecimal discount = total.multiply(BigDecimal.valueOf(voucher.getDiscountPercent()))
+                                       .divide(BigDecimal.valueOf(100));
+            return discount;
+        }
+        
+        // Calculate discount based on fixed amount
+        if (voucher.getDiscountAmount() != null) {
+            return voucher.getDiscountAmount();
+        }
+        
+        return BigDecimal.ZERO;
+    }
+
+    public BigDecimal getFinalTotal() {
+        BigDecimal total = getTotalPrice();
+        BigDecimal discount = getDiscountAmount();
+        BigDecimal finalTotal = total.subtract(discount);
+        return finalTotal.compareTo(BigDecimal.ZERO) > 0 ? finalTotal : BigDecimal.ZERO;
+    }
+    
     public void clear() {
         items.clear();
+        voucher = null;
     }
 }

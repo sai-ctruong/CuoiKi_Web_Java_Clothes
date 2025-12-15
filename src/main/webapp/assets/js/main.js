@@ -250,4 +250,71 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         });
     });
+
+    // 2.3 Apply Voucher Logic
+    window.applyVoucher = function () {
+        const codeInput = document.getElementById('voucherCode');
+        const code = codeInput ? codeInput.value : '';
+        const messageDiv = document.getElementById('voucher-message');
+
+        if (!messageDiv) return;
+
+        // Reset message
+        messageDiv.className = 'form-text mt-1';
+        messageDiv.innerText = '';
+
+        if (!code || code.trim() === '') {
+            messageDiv.innerText = 'Vui lòng nhập mã giảm giá';
+            messageDiv.className = 'form-text mt-1 text-danger';
+            return;
+        }
+
+        fetch(getContextPath() + '/cart/apply-voucher', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: 'code=' + encodeURIComponent(code)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    messageDiv.innerText = data.message;
+                    messageDiv.className = 'form-text mt-1 text-success';
+
+                    // Update Discount Row
+                    const discountRow = document.getElementById('discount-row');
+                    const discountAmountSpan = document.getElementById('discount-amount');
+                    const finalTotalSpan = document.getElementById('final-total');
+
+                    if (discountRow) discountRow.style.display = 'flex';
+
+                    const formatter = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }); // default has symbol
+                    // Custom format used in JSP is manual "xxxxx đ". JS Intl gives "xxxxx ₫" or "xxxxx đ" depending on locale.
+                    // To match strictly JSP fmt:formatNumber, we might want just number. But currency format is fine.
+                    // Let's match the JSP style "number đ"
+
+                    const formatCurrency = (val) => {
+                        return new Intl.NumberFormat('vi-VN').format(val) + ' đ';
+                    };
+
+                    if (discountAmountSpan) {
+                        discountAmountSpan.innerText = '- ' + formatCurrency(data.discountAmount);
+                    }
+
+                    if (finalTotalSpan) {
+                        finalTotalSpan.innerText = formatCurrency(data.finalTotal);
+                    }
+
+                } else {
+                    messageDiv.innerText = data.message;
+                    messageDiv.className = 'form-text mt-1 text-danger';
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                messageDiv.innerText = 'Có lỗi xảy ra khi áp dụng mã.';
+                messageDiv.className = 'form-text mt-1 text-danger';
+            });
+    };
 });
