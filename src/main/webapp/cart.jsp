@@ -142,6 +142,15 @@
                                         <span>Phí vận chuyển:</span>
                                         <span>Miễn phí</span>
                                     </section>
+
+                                    <!-- Voucher Box -->
+                                    <section class="mb-3 mt-3">
+                                        <section class="input-group">
+                                            <input type="text" class="form-control" placeholder="Mã giảm giá/Voucher"
+                                                aria-label="Mã giảm giá">
+                                            <button class="btn btn-outline-primary" type="button">Áp dụng</button>
+                                        </section>
+                                    </section>
                                     <section class="summary-row">
                                         <span>Tổng cộng:</span>
                                         <span>
