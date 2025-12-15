@@ -168,7 +168,7 @@
                                     </section>
 
                                     <section class="summary-row">
-                                        <span>Tổng cộng:</span>
+                                        <span><b>Tổng cộng:</b></span>
                                         <span id="final-total">
                                             <c:choose>
                                                 <c:when test="${not empty sessionScope.cart}">
@@ -225,6 +225,7 @@
                     }
 
                     function checkVoucherInput(input) {
+                        console.log("Input changed: '" + input.value + "'");
                         if (input.value.trim() === "") {
                             removeCartVoucher();
                         }
