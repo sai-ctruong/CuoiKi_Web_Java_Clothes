@@ -6,56 +6,53 @@ document.addEventListener('DOMContentLoaded', function () {
     // 1.1 Inject Toast HTML if not present
     if (!document.getElementById('cartToast')) {
         const toastHTML = `
-            <div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
-                <div id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header bg-success text-white">
+            <aside class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1055">
+                <output id="cartToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                    <header class="toast-header bg-success text-white">
                         <i class="bi bi-check-circle-fill me-2"></i>
                         <strong class="me-auto">Thành công</strong>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body" id="toastMessage">
+                    </header>
+                    <section class="toast-body" id="toastMessage">
                         Sản phẩm đã được thêm vào giỏ hàng.
-                    </div>
-                </div>
-            </div>`;
+                    </section>
+                </output>
+            </aside>`;
         document.body.insertAdjacentHTML('beforeend', toastHTML);
     }
 
     // 1.2 Inject Mini Cart Modal HTML
     if (!document.getElementById('miniCartModal')) {
         const miniCartHTML = `
-            <div class="modal fade" id="miniCartModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered"> <!-- Centered or just top right style -->
-                    <div class="modal-content">
-                        <div class="modal-header border-0 pb-0">
+            <section class="modal fade" id="miniCartModal" tabindex="-1" aria-hidden="true">
+                <section class="modal-dialog modal-dialog-centered"> <!-- Centered or just top right style -->
+                    <article class="modal-content">
+                        <header class="modal-header border-0 pb-0">
                             <h5 class="modal-title fw-bold">GIỎ HÀNG.</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body" id="miniCartBody">
+                        </header>
+                        <section class="modal-body" id="miniCartBody">
                             <!-- Items will be injected here -->
-                            <div class="text-center py-4">
-                                <div class="spinner-border text-secondary" role="status">
+                            <section class="text-center py-4">
+                                <span class="spinner-border text-secondary d-inline-block" role="status">
                                     <span class="visually-hidden">Loading...</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer border-0 d-block pt-0" id="miniCartFooter">
+                                </span>
+                            </section>
+                        </section>
+                        <footer class="modal-footer border-0 d-block pt-0" id="miniCartFooter">
                             <hr>
-                            <div class="d-flex justify-content-between mb-3 align-items-center">
+                            <section class="d-flex justify-content-between mb-3 align-items-center">
                                 <span class="text-muted">Tổng tiền tạm tính:</span>
                                 <span class="fs-5 fw-bold" id="miniCartTotal">0 đ</span>
-                            </div>
-                            <div class="d-flex justify-content-between mb-3 align-items-center">
-                                <span class="fw-bold">TỔNG HÓA ĐƠN</span>
-                                <span class="fs-5 fw-bold" id="miniCartFinalTotal">0 đ</span>
-                            </div>
+                            </section>
+
                             <button type="button" class="btn btn-dark w-100 py-3 text-uppercase fw-bold" onclick="window.location.href='cart'">
                                 Đi tới đặt hàng
                             </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                        </footer>
+                    </article>
+                </section>
+            </section>
             
             <style>
                 /* Mini Cart Specific Styles to match image */
@@ -169,25 +166,25 @@ document.addEventListener('DOMContentLoaded', function () {
                     const subtotalFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(item.price * item.quantity);
 
                     html += `
-                    <div class="mini-cart-item border-bottom pb-3">
+                    <article class="mini-cart-item border-bottom pb-3">
                         <img src="${item.thumbnail}" alt="${item.name}" class="mini-cart-img">
-                        <div class="mini-cart-info">
-                            <div class="mini-cart-title">${item.name}</div>
+                        <section class="mini-cart-info">
+                            <h6 class="mini-cart-title">${item.name}</h6>
                             <span class="mini-cart-remove" onclick="removeCartItem(${item.productId})">&times;</span>
                             
-                            <div class="row mini-cart-details">
-                                <div class="col-4">Màu:</div>
-                                <div class="col-8">${item.color || 'N/A'}</div>
+                            <section class="row mini-cart-details">
+                                <section class="col-4">Màu:</section>
+                                <section class="col-8">${item.color || 'N/A'}</section>
                                 
-                                <div class="col-4">Size:</div>
-                                <div class="col-8">${item.size || 'N/A'}</div>
+                                <section class="col-4">Size:</section>
+                                <section class="col-8">${item.size || 'N/A'}</section>
                                 
-                                <div class="col-4">Số lượng:</div>
-                                <div class="col-4">${item.quantity}</div>
-                                <div class="col-4 text-end mini-cart-price">${subtotalFormatted}</div>
-                            </div>
-                        </div>
-                    </div>
+                                <section class="col-4">Số lượng:</section>
+                                <section class="col-4">${item.quantity}</section>
+                                <section class="col-4 text-end mini-cart-price">${subtotalFormatted}</section>
+                            </section>
+                        </section>
+                    </article>
                     `;
                 });
 
@@ -195,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 const totalFormatted = new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(total);
                 document.getElementById('miniCartTotal').textContent = totalFormatted;
-                document.getElementById('miniCartFinalTotal').textContent = totalFormatted;
+
             })
             .catch(err => {
                 console.error(err);

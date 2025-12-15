@@ -204,7 +204,7 @@
                 <!-- Bootstrap 5 JS -->
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
                 <!-- Custom Main JS for Cart Logic -->
-                <script src="${pageContext.request.contextPath}/assets/js/main.js"></script>
+                <script src="${pageContext.request.contextPath}/assets/js/main.js?v=2"></script>
 
                 <script>
                     function updateQuantity(productId, quantity) {
