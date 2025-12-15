@@ -155,16 +155,40 @@
                                     </section>
 
                                     <!-- Voucher Box -->
+                                    <c:if test="${not empty sessionScope.voucherMessage}">
+                                        <div class="alert alert-${sessionScope.voucherStatus == 'success' ? 'success' : 'danger'} alert-dismissible fade show"
+                                            role="alert">
+                                            ${sessionScope.voucherMessage}
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                                aria-label="Close"></button>
+                                        </div>
+                                        <c:remove var="voucherMessage" scope="session" />
+                                        <c:remove var="voucherStatus" scope="session" />
+                                    </c:if>
+
                                     <section class="mb-3 mt-3">
-                                        <section class="input-group">
-                                            <input type="text" class="form-control" id="voucherCode"
+                                        <form action="${pageContext.request.contextPath}/cart/apply-voucher"
+                                            method="post" class="input-group">
+                                            <input type="text" class="form-control" name="code"
                                                 placeholder="Mã giảm giá/Voucher" aria-label="Mã giảm giá"
-                                                value="${sessionScope.cart.voucher.code}"
-                                                oninput="checkVoucherInput(this)">
-                                            <button class="btn btn-outline-primary" type="button"
-                                                onclick="applyCartVoucher()">Áp dụng</button>
-                                        </section>
-                                        <div id="voucher-message" class="form-text mt-1"></div>
+                                                value="${sessionScope.cart.voucher.code}">
+                                            <button class="btn btn-outline-primary" type="submit">Áp dụng</button>
+                                        </form>
+
+                                        <c:if test="${not empty sessionScope.cart.voucher}">
+                                            <div class="mt-2">
+                                                <small class="text-success">Đang dùng:
+                                                    <strong>${sessionScope.cart.voucher.code}</strong></small>
+                                                <form action="${pageContext.request.contextPath}/cart/remove-voucher"
+                                                    method="post" class="d-inline">
+                                                    <button type="submit"
+                                                        class="btn btn-link btn-sm text-danger p-0 ms-2"
+                                                        style="text-decoration: none;">
+                                                        <i class="bi bi-x-circle"></i> Hủy
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </c:if>
                                     </section>
 
                                     <section class="summary-row">
@@ -203,8 +227,6 @@
 
                 <!-- Bootstrap 5 JS -->
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-                <!-- Custom Main JS for Cart Logic -->
-                <script src="${pageContext.request.contextPath}/assets/js/main.js?v=2"></script>
 
                 <script>
                     function updateQuantity(productId, quantity) {
@@ -222,126 +244,6 @@
 
                     function checkout() {
                         window.location.href = '${pageContext.request.contextPath}/checkout';
-                    }
-
-                    function checkVoucherInput(input) {
-                        console.log("Input changed: '" + input.value + "'");
-                        if (input.value.trim() === "") {
-                            removeCartVoucher();
-                        }
-                    }
-
-                    function removeCartVoucher() {
-                        console.log("Removing voucher...");
-                        fetch('${pageContext.request.contextPath}/cart/remove-voucher', {
-                            method: 'POST'
-                        })
-                            .then(res => res.json())
-                            .then(data => {
-                                if (data.status === 'success') {
-                                    // Hide discount row
-                                    const discountRow = document.getElementById('discount-row');
-                                    if (discountRow) discountRow.style.display = 'none'; // Or 'style', but we used 'display: none' in JSP
-
-                                    // Reset total
-                                    const finalTotalSpan = document.getElementById('final-total');
-                                    const formatCurrency = (val) => {
-                                        return new Intl.NumberFormat('vi-VN').format(val) + ' đ';
-                                    };
-                                    if (finalTotalSpan) {
-                                        finalTotalSpan.innerText = formatCurrency(data.finalTotal);
-                                    }
-
-                                    // Clear message
-                                    const messageDiv = document.getElementById('voucher-message');
-                                    if (messageDiv) {
-                                        messageDiv.innerText = '';
-                                        messageDiv.className = 'form-text mt-1';
-                                    }
-                                }
-                            })
-                            .catch(err => console.error("Error removing voucher:", err));
-                    }
-
-                    function applyCartVoucher() {
-                        console.log("applyCartVoucher called");
-                        const codeInput = document.getElementById('voucherCode');
-                        const code = codeInput ? codeInput.value : '';
-                        const messageDiv = document.getElementById('voucher-message');
-
-                        // Reset message
-                        if (messageDiv) {
-                            messageDiv.className = 'form-text mt-1';
-                            messageDiv.innerText = '';
-                        }
-
-                        if (!code || code.trim() === '') {
-                            if (messageDiv) {
-                                messageDiv.innerText = 'Vui lòng nhập mã giảm giá';
-                                messageDiv.className = 'form-text mt-1 text-danger';
-                            } else {
-                                alert('Vui lòng nhập mã giảm giá');
-                            }
-                            return;
-                        }
-
-                        console.log("Sending voucher code: " + code);
-
-                        fetch('${pageContext.request.contextPath}/cart/apply-voucher', {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/x-www-form-urlencoded'
-                            },
-                            body: 'code=' + encodeURIComponent(code)
-                        })
-                            .then(res => res.json())
-                            .then(data => {
-                                console.log("Response:", data);
-                                if (data.status === 'success') {
-                                    if (messageDiv) {
-                                        messageDiv.innerText = data.message;
-                                        messageDiv.className = 'form-text mt-1 text-success';
-                                    } else {
-                                        alert(data.message);
-                                    }
-
-                                    // Update Discount Row
-                                    const discountRow = document.getElementById('discount-row');
-                                    const discountAmountSpan = document.getElementById('discount-amount');
-                                    const finalTotalSpan = document.getElementById('final-total');
-
-                                    if (discountRow) discountRow.style.display = 'flex';
-
-                                    const formatCurrency = (val) => {
-                                        return new Intl.NumberFormat('vi-VN').format(val) + ' đ';
-                                    };
-
-                                    if (discountAmountSpan) {
-                                        discountAmountSpan.innerText = '- ' + formatCurrency(data.discountAmount);
-                                    }
-
-                                    if (finalTotalSpan) {
-                                        finalTotalSpan.innerText = formatCurrency(data.finalTotal);
-                                    }
-
-                                } else {
-                                    if (messageDiv) {
-                                        messageDiv.innerText = data.message;
-                                        messageDiv.className = 'form-text mt-1 text-danger';
-                                    } else {
-                                        alert(data.message);
-                                    }
-                                }
-                            })
-                            .catch(err => {
-                                console.error("Error applying voucher:", err);
-                                if (messageDiv) {
-                                    messageDiv.innerText = 'Có lỗi xảy ra khi áp dụng mã (Check console).';
-                                    messageDiv.className = 'form-text mt-1 text-danger';
-                                } else {
-                                    alert('Có lỗi xảy ra khi kết nối server');
-                                }
-                            });
                     }
                 </script>
             </body>

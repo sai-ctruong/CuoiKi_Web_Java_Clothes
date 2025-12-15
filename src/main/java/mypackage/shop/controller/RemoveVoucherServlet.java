@@ -22,30 +22,26 @@ public class RemoveVoucherServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
+        
+        System.out.println("RemoveVoucherServlet: Request received.");
+        
+        HttpSession session = request.getSession();
+        Cart cart = (Cart) session.getAttribute("cart");
+        
+        if (cart != null) {
+            System.out.println("RemoveVoucherServlet: Removing voucher from cart.");
+            cart.setVoucher(null); // Remove voucher
+            session.setAttribute("cart", cart); // Update session
             
-            System.out.println("RemoveVoucherServlet: Request received.");
-            
-            HttpSession session = request.getSession();
-            Cart cart = (Cart) session.getAttribute("cart");
-            
-            if (cart != null) {
-                System.out.println("RemoveVoucherServlet: Removing voucher from cart.");
-                cart.setVoucher(null); // Remove voucher
-                session.setAttribute("cart", cart); // Update session
-                
-                // Return success with new total
-                out.print("{");
-                out.print("\"status\": \"success\",");
-                out.print("\"message\": \"Đã hủy mã giảm giá\",");
-                out.print("\"finalTotal\": " + cart.getFinalTotal());
-                out.print("}");
-            } else {
-                 System.out.println("RemoveVoucherServlet: Cart is null.");
-                 out.print("{\"status\": \"error\", \"message\": \"Giỏ hàng trống\"}");
-            }
+            // Set message
+            session.setAttribute("voucherMessage", "Đã hủy mã giảm giá");
+            session.setAttribute("voucherStatus", "success");
+        } else {
+             System.out.println("RemoveVoucherServlet: Cart is null.");
         }
+        
+        // Redirect back to cart
+        response.sendRedirect(request.getContextPath() + "/cart");
     }
 
     @Override

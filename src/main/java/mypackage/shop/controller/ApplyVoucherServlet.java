@@ -34,52 +34,62 @@ public class ApplyVoucherServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            
-            String code = request.getParameter("code");
-            System.out.println("ApplyVoucherServlet: Received code = " + code);
-            
-            HttpSession session = request.getSession();
-            Cart cart = (Cart) session.getAttribute("cart");
-            
-            // Check if cart exists and is not empty
-            if (cart == null || cart.isEmpty()) {
-                System.out.println("ApplyVoucherServlet: Cart is null or empty");
-                out.print("{\"status\": \"error\", \"message\": \"Giỏ hàng trống!\"}");
-                return;
-            }
-            
-            // Check if code is empty
-            if (code == null || code.trim().isEmpty()) {
-                out.print("{\"status\": \"error\", \"message\": \"Vui lòng nhập mã giảm giá!\"}");
-                return;
-            }
-            
-            VoucherDAO voucherDAO = new VoucherDAO();
+        
+        String code = request.getParameter("code");
+        System.out.println("ApplyVoucherServlet: Received code = " + code);
+        
+        HttpSession session = request.getSession();
+        Cart cart = (Cart) session.getAttribute("cart");
+        
+        // Check if cart exists and is not empty
+        if (cart == null || cart.isEmpty()) {
+            session.setAttribute("voucherMessage", "Giỏ hàng trống!");
+            session.setAttribute("voucherStatus", "error");
+            response.sendRedirect(request.getContextPath() + "/cart");
+            return;
+        }
+        
+        // Check if code is empty
+        if (code == null || code.trim().isEmpty()) {
+            session.setAttribute("voucherMessage", "Vui lòng nhập mã giảm giá!");
+            session.setAttribute("voucherStatus", "error");
+            response.sendRedirect(request.getContextPath() + "/cart");
+            return;
+        }
+        
+        VoucherDAO voucherDAO = new VoucherDAO();
+        try {
             Voucher voucher = voucherDAO.findByCode(code.trim());
             
             // Check if voucher exists
             if (voucher == null) {
-                out.print("{\"status\": \"error\", \"message\": \"Mã giảm giá không tồn tại!\"}");
+                session.setAttribute("voucherMessage", "Mã giảm giá không tồn tại!");
+                session.setAttribute("voucherStatus", "error");
+                response.sendRedirect(request.getContextPath() + "/cart");
                 return;
             }
             
             // Check if voucher is valid
             if (!voucher.isValid()) {
-                out.print("{\"status\": \"error\", \"message\": \"Mã giảm giá đã hết hạn hoặc không hoạt động!\"}");
+                session.setAttribute("voucherMessage", "Mã giảm giá đã hết hạn hoặc không hoạt động!");
+                session.setAttribute("voucherStatus", "error");
+                response.sendRedirect(request.getContextPath() + "/cart");
                 return;
             }
             
             // Check minimum order value
             if (voucher.getMinOrderValue() != null && cart.getTotalPrice().compareTo(voucher.getMinOrderValue()) < 0) {
-                 out.print("{\"status\": \"error\", \"message\": \"Đơn hàng chưa đạt giá trị tối thiểu để áp dụng mã này!\"}");
+                 session.setAttribute("voucherMessage", "Đơn hàng chưa đạt giá trị tối thiểu để áp dụng mã này!");
+                 session.setAttribute("voucherStatus", "error");
+                 response.sendRedirect(request.getContextPath() + "/cart");
                  return;
             }
             
-            // Check usage limit (Optional: logic to decrease limit would be in Order placement, here just check > 0)
+            // Check usage limit
             if (voucher.getUsageLimit() <= 0) {
-                out.print("{\"status\": \"error\", \"message\": \"Mã giảm giá đã hết lượt sử dụng!\"}");
+                session.setAttribute("voucherMessage", "Mã giảm giá đã hết lượt sử dụng!");
+                session.setAttribute("voucherStatus", "error");
+                response.sendRedirect(request.getContextPath() + "/cart");
                 return;
             }
             
@@ -87,17 +97,15 @@ public class ApplyVoucherServlet extends HttpServlet {
             cart.setVoucher(voucher);
             session.setAttribute("cart", cart); // Update session
             
-            // Calculate new values
-            BigDecimal discountAmount = cart.getDiscountAmount();
-            BigDecimal finalTotal = cart.getFinalTotal();
-            
-            // Return success JSON
-            out.print("{");
-            out.print("\"status\": \"success\",");
-            out.print("\"message\": \"Áp dụng mã giảm giá thành công!\",");
-            out.print("\"discountAmount\": " + discountAmount + ",");
-            out.print("\"finalTotal\": " + finalTotal);
-            out.print("}");
+            session.setAttribute("voucherMessage", "Áp dụng mã giảm giá thành công!");
+            session.setAttribute("voucherStatus", "success");
+            response.sendRedirect(request.getContextPath() + "/cart");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            session.setAttribute("voucherMessage", "Có lỗi xảy ra: " + e.getMessage());
+            session.setAttribute("voucherStatus", "error");
+            response.sendRedirect(request.getContextPath() + "/cart");
         }
     }
 
