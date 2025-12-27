@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" 
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+    
+    <persistence-unit name="my_persistence_unit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        
+        <!-- Entity classes -->
+        <class>mypackage.shop.model.User</class>
+        <class>mypackage.shop.model.Category</class>
+        <class>mypackage.shop.model.Brand</class>
+        <class>mypackage.shop.model.Product</class>
+        <class>mypackage.shop.model.ProductImage</class>
+        <class>mypackage.shop.model.Order</class>
+        <class>mypackage.shop.model.OrderDetail</class>
+        <class>mypackage.shop.model.CartItem</class>
+        <class>mypackage.shop.model.Address</class>
+        <class>mypackage.shop.model.Review</class>
+        <class>mypackage.shop.model.Voucher</class>
+        <class>mypackage.shop.model.Wishlist</class>
+        
+        <properties>
+            <!-- Database connection -->
+            <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="jakarta.persistence.jdbc.url" 
+                      value="jdbc:mysql://shopdb-mysql12-student-92f8.h.aivencloud.com:15276/defaultdb?useSSL=true&amp;allowPublicKeyRetrieval=true&amp;serverTimezone=UTC&amp;connectTimeout=60000&amp;socketTimeout=60000"/>
+            <property name="jakarta.persistence.jdbc.user" value="avnadmin"/>
+            <property name="jakarta.persistence.jdbc.password" value="AVNS_ge2IzDma7nZ7gW5YVM-"/>
+            
+            <!-- Hibernate settings -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            
+            <!-- Connection pool -->
+            <property name="hibernate.connection.pool_size" value="10"/>
+        </properties>
+    </persistence-unit>
+</persistence>
