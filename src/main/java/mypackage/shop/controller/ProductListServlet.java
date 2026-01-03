@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -36,6 +37,24 @@ public class ProductListServlet extends HttpServlet {
         String categoryId = request.getParameter("id");
         String brandId = request.getParameter("brand");
         String sortBy = request.getParameter("sort");
+        
+        // Price filter parameters
+        String minPriceStr = request.getParameter("minPrice");
+        String maxPriceStr = request.getParameter("maxPrice");
+        Double minPrice = null;
+        Double maxPrice = null;
+        
+        // Parse price parameters
+        try {
+            if (minPriceStr != null && !minPriceStr.trim().isEmpty()) {
+                minPrice = Double.parseDouble(minPriceStr);
+            }
+            if (maxPriceStr != null && !maxPriceStr.trim().isEmpty()) {
+                maxPrice = Double.parseDouble(maxPriceStr);
+            }
+        } catch (NumberFormatException e) {
+            // Invalid price format, ignore
+        }
         
         // Get filter options
         List<Category> categories = categoryDAO.getAllCategories();
@@ -73,9 +92,60 @@ public class ProductListServlet extends HttpServlet {
             products = productDAO.getAllProducts();
         }
         
+        // Apply price filter
+        if (minPrice != null || maxPrice != null) {
+            products = filterByPrice(products, minPrice, maxPrice);
+        }
+        
+        // Apply sorting
+        if (sortBy != null && !sortBy.isEmpty()) {
+            products = sortProducts(products, sortBy);
+        }
+        
+        // Set filter attributes for JSP
         request.setAttribute("products", products);
         request.setAttribute("currentSort", sortBy);
+        request.setAttribute("currentMinPrice", minPrice);
+        request.setAttribute("currentMaxPrice", maxPrice);
         
         request.getRequestDispatcher("/products.jsp").forward(request, response);
+    }
+    
+    /**
+     * Filter products by price range
+     */
+    private List<Product> filterByPrice(List<Product> products, Double minPrice, Double maxPrice) {
+        return products.stream()
+                .filter(product -> {
+                    BigDecimal price = product.getPrice();
+                    boolean matchMin = minPrice == null || price.doubleValue() >= minPrice;
+                    boolean matchMax = maxPrice == null || price.doubleValue() <= maxPrice;
+                    return matchMin && matchMax;
+                })
+                .collect(java.util.stream.Collectors.toList());
+    }
+    
+    /**
+     * Sort products by specified criteria
+     */
+    private List<Product> sortProducts(List<Product> products, String sortBy) {
+        switch (sortBy) {
+            case "price-asc":
+                products.sort((a, b) -> a.getPrice().compareTo(b.getPrice()));
+                break;
+            case "price-desc":
+                products.sort((a, b) -> b.getPrice().compareTo(a.getPrice()));
+                break;
+            case "name":
+                products.sort((a, b) -> a.getName().compareToIgnoreCase(b.getName()));
+                break;
+            case "newest":
+                products.sort((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()));
+                break;
+            default:
+                // No sorting or unknown sort type
+                break;
+        }
+        return products;
     }
 }

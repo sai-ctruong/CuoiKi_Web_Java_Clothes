@@ -231,6 +231,118 @@
             color: #fff;
         }
         
+        /* Voucher Cards Section */
+        .voucher-section {
+            background: #fff;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+        
+        .voucher-section-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .voucher-section-title i {
+            color: #c9a962;
+        }
+        
+        .voucher-cards {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        
+        .voucher-card {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(135deg, #fffbf0 0%, #fff9e6 100%);
+            border: 2px dashed #c9a962;
+            border-radius: 10px;
+            padding: 1rem;
+            gap: 1rem;
+            transition: all 0.2s ease;
+        }
+        
+        .voucher-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(201, 169, 98, 0.2);
+            border-style: solid;
+        }
+        
+        .voucher-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #c9a962 0%, #d4af37 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .voucher-info {
+            flex: 1;
+        }
+        
+        .voucher-code {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1a1a1a;
+            font-family: monospace;
+            background: rgba(201, 169, 98, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.25rem;
+        }
+        
+        .voucher-discount {
+            font-weight: 600;
+            color: #c9a962;
+            font-size: 0.95rem;
+        }
+        
+        .voucher-condition {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 0.25rem;
+        }
+        
+        .voucher-apply-btn {
+            background: #c9a962;
+            color: #fff;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        
+        .voucher-apply-btn:hover {
+            background: #b8923b;
+            transform: scale(1.05);
+        }
+        
+        .no-vouchers {
+            text-align: center;
+            padding: 1.5rem;
+            color: #888;
+            font-size: 0.9rem;
+        }
+        
         @media (max-width: 991px) {
             .cart-table thead { display: none; }
             .cart-table td { display: block; padding: 0.75rem 1rem; }
@@ -355,11 +467,53 @@
                                             <button type="submit">Áp dụng</button>
                                         </form>
                                         <c:if test="${not empty sessionScope.voucherMessage}">
-                                            <div class="alert alert-${sessionScope.voucherStatus eq 'success' ? 'success' : 'danger'} py-2 mb-0" style="font-size: 0.875rem;">
+                                            <div class="alert alert-${sessionScope.voucherStatus eq 'success' ? 'success' : 'danger'} py-2 mb-3" style="font-size: 0.875rem;">
                                                 ${sessionScope.voucherMessage}
                                             </div>
                                             <c:remove var="voucherMessage" scope="session"/>
                                             <c:remove var="voucherStatus" scope="session"/>
+                                        </c:if>
+                                        
+                                        <%-- Available Vouchers Section --%>
+                                        <c:if test="${not empty availableVouchers}">
+                                            <div class="voucher-section mt-3" style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
+                                                <div class="voucher-section-title" style="font-size: 0.95rem; margin-bottom: 0.75rem;">
+                                                    <i class="bi bi-gift"></i> Mã giảm giá có sẵn
+                                                </div>
+                                                <div class="voucher-cards">
+                                                    <c:forEach items="${availableVouchers}" var="v">
+                                                        <c:if test="${v.valid}">
+                                                            <div class="voucher-card">
+                                                                <div class="voucher-icon">
+                                                                    <i class="bi bi-percent"></i>
+                                                                </div>
+                                                                <div class="voucher-info">
+                                                                    <div class="voucher-code">${v.code}</div>
+                                                                    <div class="voucher-discount">
+                                                                        <c:choose>
+                                                                            <c:when test="${v.discountPercent != null && v.discountPercent > 0}">
+                                                                                Giảm ${v.discountPercent}%
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                Giảm <fmt:formatNumber value="${v.discountAmount}" type="number" groupingUsed="true" maxFractionDigits="0"/>đ
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                    </div>
+                                                                    <c:if test="${v.minOrderValue != null && v.minOrderValue > 0}">
+                                                                        <div class="voucher-condition">
+                                                                            Đơn tối thiểu <fmt:formatNumber value="${v.minOrderValue}" type="number" groupingUsed="true" maxFractionDigits="0"/>đ
+                                                                        </div>
+                                                                    </c:if>
+                                                                </div>
+                                                                <form action="${pageContext.request.contextPath}/cart/apply-voucher" method="post" style="margin:0;">
+                                                                    <input type="hidden" name="code" value="${v.code}">
+                                                                    <button type="submit" class="voucher-apply-btn">Áp dụng</button>
+                                                                </form>
+                                                            </div>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </div>
+                                            </div>
                                         </c:if>
                                     </c:otherwise>
                                 </c:choose>

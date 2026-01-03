@@ -19,6 +19,7 @@ import mypackage.shop.model.CartItem;
 import mypackage.shop.model.CartItemDTO;
 import mypackage.shop.model.User;
 import mypackage.shop.model.Voucher;
+import mypackage.shop.dao.VoucherDAO;
 
 /**
  * ViewCartServlet - Hiển thị giỏ hàng
@@ -29,11 +30,13 @@ import mypackage.shop.model.Voucher;
 public class ViewCartServlet extends HttpServlet {
 
     private CartDAO cartDAO;
+    private VoucherDAO voucherDAO;
     
     @Override 
     public void init() throws ServletException {
         super.init();
         cartDAO = new CartDAO();
+        voucherDAO = new VoucherDAO();
     }
 
     @Override
@@ -92,12 +95,16 @@ public class ViewCartServlet extends HttpServlet {
             total = BigDecimal.ZERO;
         }
         
+        // Load available vouchers for display
+        List<Voucher> availableVouchers = voucherDAO.getActiveVouchers();
+        
         // Set attributes for JSP
         request.setAttribute("cartItems", cartItems);
         request.setAttribute("subtotal", subtotal);
         request.setAttribute("discount", discount);
         request.setAttribute("total", total);
         request.setAttribute("appliedVoucher", appliedVoucher);
+        request.setAttribute("availableVouchers", availableVouchers);
         
         // Forward to cart.jsp
         request.getRequestDispatcher("/cart.jsp").forward(request, response);
