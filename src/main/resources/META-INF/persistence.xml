@@ -19,6 +19,7 @@
         <class>mypackage.shop.model.Review</class>
         <class>mypackage.shop.model.Voucher</class>
         <class>mypackage.shop.model.Wishlist</class>
+        <class>mypackage.shop.model.UserVoucher</class>
         
         <properties>
             <!-- Database connection -->

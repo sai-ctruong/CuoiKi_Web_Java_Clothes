@@ -15,9 +15,11 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import mypackage.shop.dao.CartDAO;
+import mypackage.shop.dao.UserVoucherDAO;
 import mypackage.shop.model.CartItem;
 import mypackage.shop.model.CartItemDTO;
 import mypackage.shop.model.User;
+import mypackage.shop.model.UserVoucher;
 import mypackage.shop.model.Voucher;
 import mypackage.shop.dao.VoucherDAO;
 
@@ -31,12 +33,14 @@ public class ViewCartServlet extends HttpServlet {
 
     private CartDAO cartDAO;
     private VoucherDAO voucherDAO;
+    private UserVoucherDAO userVoucherDAO;
     
     @Override 
     public void init() throws ServletException {
         super.init();
         cartDAO = new CartDAO();
         voucherDAO = new VoucherDAO();
+        userVoucherDAO = new UserVoucherDAO();
     }
 
     @Override
@@ -95,7 +99,13 @@ public class ViewCartServlet extends HttpServlet {
             total = BigDecimal.ZERO;
         }
         
-        // Load available vouchers for display
+        // Load user's personal vouchers (from UserVoucher table)
+        List<UserVoucher> userVouchers = new ArrayList<>();
+        if (user != null) {
+            userVouchers = userVoucherDAO.getAvailableVouchersByUserId(user.getId());
+        }
+        
+        // Also load public vouchers for display (optional - users can still enter codes manually)
         List<Voucher> availableVouchers = voucherDAO.getActiveVouchers();
         
         // Set attributes for JSP
@@ -104,7 +114,8 @@ public class ViewCartServlet extends HttpServlet {
         request.setAttribute("discount", discount);
         request.setAttribute("total", total);
         request.setAttribute("appliedVoucher", appliedVoucher);
-        request.setAttribute("availableVouchers", availableVouchers);
+        request.setAttribute("userVouchers", userVouchers);  // User's personal vouchers
+        request.setAttribute("availableVouchers", availableVouchers);  // Public vouchers
         
         // Forward to cart.jsp
         request.getRequestDispatcher("/cart.jsp").forward(request, response);

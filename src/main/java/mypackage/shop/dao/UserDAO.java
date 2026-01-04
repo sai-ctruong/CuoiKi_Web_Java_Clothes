@@ -236,4 +236,26 @@ public class UserDAO extends GenericDAO<User> {
             em.close();
         }
     }
+    
+    /**
+     * Find user by email
+     * @param email Email to search
+     * @return User object or null if not found
+     */
+    public User findByEmail(String email) {
+        EntityManager em = getEntityManager();
+        try {
+            String jpql = "SELECT u FROM User u WHERE LOWER(u.email) = LOWER(:email)";
+            TypedQuery<User> query = em.createQuery(jpql, User.class);
+            query.setParameter("email", email);
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            em.close();
+        }
+    }
 }

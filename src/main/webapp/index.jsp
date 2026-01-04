@@ -391,7 +391,7 @@
     </section>
 
     <!-- Newsletter -->
-    <section class="newsletter-section">
+    <section class="newsletter-section" id="newsletter">
         <div class="container">
             <div class="newsletter-box">
                 <div class="row align-items-center">
@@ -402,8 +402,8 @@
                         </p>
                     </div>
                     <div class="col-lg-6">
-                        <form class="newsletter-form d-flex gap-2">
-                            <input type="email" class="form-control" placeholder="Nhập email của bạn...">
+                        <form action="${pageContext.request.contextPath}/newsletter/subscribe" method="post" class="newsletter-form d-flex gap-2">
+                            <input type="email" name="email" class="form-control" placeholder="Nhập email của bạn..." required>
                             <button class="btn btn-gold px-4" type="submit">Đăng Ký</button>
                         </form>
                     </div>

@@ -156,4 +156,95 @@ public class EmailUtils {
         
         return html.toString();
     }
+    
+    /**
+     * Send voucher email to user
+     * @param toEmail Recipient email
+     * @param voucherCode Voucher code
+     * @param discountPercent Discount percentage
+     * @return true if sent successfully
+     */
+    public static boolean sendVoucherEmail(String toEmail, String voucherCode, int discountPercent) {
+        try {
+            Properties props = new Properties();
+            props.put("mail.smtp.host", SMTP_HOST);
+            props.put("mail.smtp.port", SMTP_PORT);
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            
+            Session session = Session.getInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(EMAIL_FROM, EMAIL_PASSWORD);
+                }
+            });
+            
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(EMAIL_FROM, "Clothing Shop"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            message.setSubject("🎉 Bạn đã nhận được voucher giảm giá " + discountPercent + "%!");
+            
+            // Build HTML email content
+            String htmlContent = buildVoucherEmailHtml(voucherCode, discountPercent);
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
+            
+            Transport.send(message);
+            
+            System.out.println("Voucher email sent successfully to: " + toEmail);
+            return true;
+            
+        } catch (Exception e) {
+            System.err.println("Failed to send voucher email: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    /**
+     * Build HTML content for voucher email
+     */
+    private static String buildVoucherEmailHtml(String voucherCode, int discountPercent) {
+        StringBuilder html = new StringBuilder();
+        
+        html.append("<!DOCTYPE html>");
+        html.append("<html><head><meta charset='UTF-8'></head><body>");
+        html.append("<div style='max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;'>");
+        
+        // Header
+        html.append("<div style='background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;'>");
+        html.append("<h1 style='margin: 0; font-size: 24px;'>✨ Clothing Shop ✨</h1>");
+        html.append("<p style='margin: 10px 0 0 0;'>Cảm ơn bạn đã đăng ký nhận ưu đãi!</p>");
+        html.append("</div>");
+        
+        // Content
+        html.append("<div style='background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;'>");
+        html.append("<p>Xin chào,</p>");
+        html.append("<p>Chúng tôi rất vui khi bạn quan tâm đến Clothing Shop. Đây là voucher đặc biệt dành riêng cho bạn:</p>");
+        
+        // Voucher Box
+        html.append("<div style='background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%); border: 2px dashed #c9a962; border-radius: 10px; padding: 25px; text-align: center; margin: 20px 0;'>");
+        html.append("<div style='font-size: 20px; color: #16213e; font-weight: 600;'>Giảm ngay ").append(discountPercent).append("%</div>");
+        html.append("<div style='font-size: 32px; font-weight: bold; color: #c9a962; letter-spacing: 3px; margin: 10px 0; font-family: monospace;'>").append(voucherCode).append("</div>");
+        html.append("<p style='color: #666; margin: 0; font-size: 14px;'>Nhập mã này khi thanh toán</p>");
+        html.append("</div>");
+        
+        html.append("<p>Sử dụng mã này để được giảm giá cho đơn hàng của bạn tại Clothing Shop.</p>");
+        
+        // Button
+        html.append("<div style='text-align: center;'>");
+        html.append("<a href='http://localhost:8080/ProjectCuoiKi_Clothes/products' style='display: inline-block; background: #c9a962; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; font-weight: 600; margin-top: 20px;'>Mua sắm ngay</a>");
+        html.append("</div>");
+        html.append("</div>");
+        
+        // Footer
+        html.append("<div style='text-align: center; color: #888; font-size: 12px; margin-top: 20px;'>");
+        html.append("<p>© 2026 Clothing Shop. All rights reserved.</p>");
+        html.append("<p>Email này được gửi tự động, vui lòng không trả lời.</p>");
+        html.append("</div>");
+        
+        html.append("</div>");
+        html.append("</body></html>");
+        
+        return html.toString();
+    }
 }

@@ -462,10 +462,16 @@
                                         </div>
                                     </c:when>
                                     <c:otherwise>
-                                        <form action="${pageContext.request.contextPath}/cart/apply-voucher" method="post" class="voucher-input">
-                                            <input type="text" name="code" placeholder="Mã giảm giá">
-                                            <button type="submit">Áp dụng</button>
-                                        </form>
+                                        <%-- Manual voucher code input --%>
+                                        <div class="mb-3">
+                                            <label class="form-label small text-muted mb-2">
+                                                <i class="bi bi-keyboard me-1"></i>Nhập mã giảm giá
+                                            </label>
+                                            <form action="${pageContext.request.contextPath}/cart/apply-voucher" method="post" class="voucher-input">
+                                                <input type="text" name="code" placeholder="Nhập mã voucher...">
+                                                <button type="submit">Áp dụng</button>
+                                            </form>
+                                        </div>
                                         <c:if test="${not empty sessionScope.voucherMessage}">
                                             <div class="alert alert-${sessionScope.voucherStatus eq 'success' ? 'success' : 'danger'} py-2 mb-3" style="font-size: 0.875rem;">
                                                 ${sessionScope.voucherMessage}
@@ -474,11 +480,57 @@
                                             <c:remove var="voucherStatus" scope="session"/>
                                         </c:if>
                                         
-                                        <%-- Available Vouchers Section --%>
+                                        <%-- User's Personal Vouchers Section --%>
+                                        <c:if test="${not empty userVouchers}">
+                                            <div class="voucher-section mt-3" style="background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%); padding: 1rem; border-radius: 10px; border: 1px solid #e6d9a8;">
+                                                <div class="voucher-section-title" style="font-size: 0.95rem; margin-bottom: 0.75rem; color: #8b7355;">
+                                                    <i class="bi bi-wallet2"></i> Voucher của bạn
+                                                    <span class="badge bg-warning text-dark ms-2">${userVouchers.size()}</span>
+                                                </div>
+                                                <div class="voucher-cards">
+                                                    <c:forEach items="${userVouchers}" var="uv">
+                                                        <c:if test="${uv.available}">
+                                                            <div class="voucher-card" style="background: linear-gradient(135deg, #fff 0%, #fffbf0 100%);">
+                                                                <div class="voucher-icon" style="background: linear-gradient(135deg, #d4af37 0%, #c9a962 100%);">
+                                                                    <i class="bi bi-gift-fill"></i>
+                                                                </div>
+                                                                <div class="voucher-info">
+                                                                    <div class="voucher-code">${uv.voucher.code}</div>
+                                                                    <div class="voucher-discount">
+                                                                        <c:choose>
+                                                                            <c:when test="${uv.voucher.discountPercent != null && uv.voucher.discountPercent > 0}">
+                                                                                Giảm ${uv.voucher.discountPercent}%
+                                                                            </c:when>
+                                                                            <c:otherwise>
+                                                                                Giảm <fmt:formatNumber value="${uv.voucher.discountAmount}" type="number" groupingUsed="true" maxFractionDigits="0"/>đ
+                                                                            </c:otherwise>
+                                                                        </c:choose>
+                                                                    </div>
+                                                                    <c:if test="${uv.voucher.minOrderValue != null && uv.voucher.minOrderValue > 0}">
+                                                                        <div class="voucher-condition">
+                                                                            Đơn tối thiểu <fmt:formatNumber value="${uv.voucher.minOrderValue}" type="number" groupingUsed="true" maxFractionDigits="0"/>đ
+                                                                        </div>
+                                                                    </c:if>
+                                                                </div>
+                                                                <form action="${pageContext.request.contextPath}/cart/apply-voucher" method="post" style="margin:0;">
+                                                                    <input type="hidden" name="code" value="${uv.voucher.code}">
+                                                                    <input type="hidden" name="userVoucherId" value="${uv.id}">
+                                                                    <button type="submit" class="voucher-apply-btn" style="background: linear-gradient(135deg, #d4af37 0%, #c9a962 100%);">
+                                                                        <i class="bi bi-check2 me-1"></i>Chọn
+                                                                    </button>
+                                                                </form>
+                                                            </div>
+                                                        </c:if>
+                                                    </c:forEach>
+                                                </div>
+                                            </div>
+                                        </c:if>
+                                        
+                                        <%-- Public Available Vouchers Section --%>
                                         <c:if test="${not empty availableVouchers}">
                                             <div class="voucher-section mt-3" style="background: #f8f9fa; padding: 1rem; border-radius: 8px;">
                                                 <div class="voucher-section-title" style="font-size: 0.95rem; margin-bottom: 0.75rem;">
-                                                    <i class="bi bi-gift"></i> Mã giảm giá có sẵn
+                                                    <i class="bi bi-ticket-perforated"></i> Mã công khai
                                                 </div>
                                                 <div class="voucher-cards">
                                                     <c:forEach items="${availableVouchers}" var="v">

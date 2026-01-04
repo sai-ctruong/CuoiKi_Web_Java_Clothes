@@ -34,6 +34,95 @@ public class ManageProductServlet extends HttpServlet {
     private final ProductDAO productDAO = new ProductDAO();
     private final CategoryDAO categoryDAO = new CategoryDAO();
     private final BrandDAO brandDAO = new BrandDAO();
+    
+    /**
+     * Get both upload directories (source and target)
+     * Source: persistent storage, survives rebuilds
+     * Target: where server reads from
+     */
+    private String[] getUploadDirectories() {
+        String realPath = getServletContext().getRealPath("/");
+        
+        // Target directory (where server reads from)
+        java.io.File targetUploadDir = new java.io.File(realPath, "uploads/products");
+        if (!targetUploadDir.exists()) {
+            targetUploadDir.mkdirs();
+        }
+        
+        // Source directory (persistent storage)
+        java.io.File targetDir = new java.io.File(realPath);
+        java.io.File projectRoot = targetDir.getParentFile().getParentFile();
+        java.io.File sourceUploadDir = new java.io.File(projectRoot, "src/main/webapp/uploads/products");
+        if (!sourceUploadDir.exists()) {
+            sourceUploadDir.mkdirs();
+        }
+        
+        return new String[] { 
+            sourceUploadDir.getAbsolutePath(),  // [0] source - persistent
+            targetUploadDir.getAbsolutePath()   // [1] target - for server
+        };
+    }
+    
+    /**
+     * Get upload directory - saves to BOTH source and target
+     */
+    private String getUploadDirectory() {
+        return getUploadDirectories()[0]; // Return source for primary save
+    }
+    
+    /**
+     * Copy a saved file from source to target for immediate access
+     */
+    private void copyToTarget(String fileName) {
+        try {
+            String[] dirs = getUploadDirectories();
+            java.io.File source = new java.io.File(dirs[0], fileName);
+            java.io.File target = new java.io.File(dirs[1], fileName);
+            
+            if (source.exists() && !target.exists()) {
+                java.nio.file.Files.copy(source.toPath(), target.toPath());
+            }
+        } catch (Exception e) {
+            System.err.println("Error copying file to target: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Sync all images from source to target on init
+     */
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        syncImagesToTarget();
+    }
+    
+    /**
+     * Copy all images from source folder to target folder
+     */
+    private void syncImagesToTarget() {
+        try {
+            String[] dirs = getUploadDirectories();
+            java.io.File sourceDir = new java.io.File(dirs[0]);
+            java.io.File targetDir = new java.io.File(dirs[1]);
+            
+            if (sourceDir.exists() && sourceDir.isDirectory()) {
+                java.io.File[] files = sourceDir.listFiles();
+                if (files != null) {
+                    for (java.io.File file : files) {
+                        if (file.isFile()) {
+                            java.io.File targetFile = new java.io.File(targetDir, file.getName());
+                            if (!targetFile.exists()) {
+                                java.nio.file.Files.copy(file.toPath(), targetFile.toPath());
+                                System.out.println("Synced image: " + file.getName());
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error syncing images: " + e.getMessage());
+        }
+    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -165,11 +254,14 @@ public class ManageProductServlet extends HttpServlet {
                 // Handle image upload
                 Part imagePart = request.getPart("image");
                 if (imagePart != null && imagePart.getSize() > 0) {
-                    String uploadDir = getServletContext().getRealPath("/uploads/products");
+                    // Lưu vào thư mục source để ảnh không bị mất khi rebuild
+                    String uploadDir = getUploadDirectory();
                     String fileName = UploadUtils.saveFile(imagePart, uploadDir);
                     if (fileName != null) {
                         String imageUrl = "/uploads/products/" + fileName;
                         productDAO.addProductImage(productId, imageUrl, true);
+                        // Copy to target for immediate display
+                        copyToTarget(fileName);
                     }
                 }
                 
@@ -222,13 +314,16 @@ public class ManageProductServlet extends HttpServlet {
                     // Handle new image upload
                     Part imagePart = request.getPart("image");
                     if (imagePart != null && imagePart.getSize() > 0) {
-                        String uploadDir = getServletContext().getRealPath("/uploads/products");
+                        // Lưu vào thư mục source để ảnh không bị mất khi rebuild
+                        String uploadDir = getUploadDirectory();
                         String fileName = UploadUtils.saveFile(imagePart, uploadDir);
                         if (fileName != null) {
                             // Delete old images and add new one
                             productDAO.deleteProductImages(id);
                             String imageUrl = "/uploads/products/" + fileName;
                             productDAO.addProductImage(id, imageUrl, true);
+                            // Copy to target for immediate display
+                            copyToTarget(fileName);
                         }
                     }
                     

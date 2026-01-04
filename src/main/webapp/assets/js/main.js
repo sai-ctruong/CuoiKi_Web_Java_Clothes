@@ -90,17 +90,12 @@
             });
         }
         
-        // Also handle forms with newsletter-form class
-        document.querySelectorAll('.newsletter-form').forEach(function(form) {
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                handleNewsletterSubmit(this);
-            });
-        });
+        // Don't intercept .newsletter-form - let it submit normally to servlet
+        // The form has action="/newsletter/subscribe" and will be handled by server
     }
 
     /**
-     * Handle newsletter form submission
+     * Handle newsletter form submission - Now actually calls the servlet
      */
     function handleNewsletterSubmit(form) {
         const emailInput = form.querySelector('input[type="email"]');
@@ -114,12 +109,27 @@
         
         setButtonLoading(submitBtn, true);
         
-        // Simulate API call
-        setTimeout(function() {
+        // Get the form action URL or construct it
+        const contextPath = document.querySelector('meta[name="context-path"]')?.content || '';
+        const actionUrl = form.action || (contextPath + '/newsletter/subscribe');
+        
+        // Actually submit to the servlet using fetch
+        fetch(actionUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: 'email=' + encodeURIComponent(email)
+        })
+        .then(function(response) {
+            // The servlet redirects, so we just reload the page to see the message
+            window.location.reload();
+        })
+        .catch(function(error) {
             setButtonLoading(submitBtn, false);
-            showToast('Đăng ký thành công! Kiểm tra email để nhận ưu đãi.', 'success');
-            form.reset();
-        }, 1500);
+            showToast('Có lỗi xảy ra, vui lòng thử lại!', 'error');
+            console.error('Newsletter error:', error);
+        });
     }
 
     /**
