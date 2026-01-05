@@ -1,0 +1,17 @@
+FROM maven:3.9-eclipse-temurin-11 AS build
+WORKDIR /app
+
+# Copy toàn bộ thư mục final vào trong Docker (bao gồm cả folder con CuoiKi...)
+COPY . .
+
+# Chạy lệnh Maven, nhưng chỉ định file pom nằm trong thư mục con (-f)
+RUN mvn clean package -DskipTests -f CuoiKi_Web_Java_Clothes/pom.xml
+
+FROM tomcat:10.1-jdk11-temurin-focal
+RUN rm -rf /usr/local/tomcat/webapps/*
+
+# Copy file WAR từ thư mục target nằm trong thư mục con
+COPY --from=build /app/CuoiKi_Web_Java_Clothes/target/ProjectCuoiKi_Clothes-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
