@@ -106,57 +106,52 @@
                                                 </c:if>
                                             </td>
                                             <td class="text-center">
-                                                <div class="btn-group btn-group-sm">
-                                                    <!-- Toggle Status -->
-                                                    <form method="post" action="${pageContext.request.contextPath}/manage/users" class="d-inline">
+                                                <div class="d-flex justify-content-center gap-1">
+                                                    <!-- Toggle Status Button -->
+                                                    <form method="post" action="${pageContext.request.contextPath}/manage/users" class="d-inline" id="toggleForm${u.id}">
                                                         <input type="hidden" name="action" value="toggleStatus">
                                                         <input type="hidden" name="userId" value="${u.id}">
-                                                        <button type="submit" class="btn ${u.status ? 'btn-outline-danger' : 'btn-outline-success'}" 
+                                                        <button type="submit" class="btn btn-sm ${u.status ? 'btn-outline-danger' : 'btn-outline-success'}" 
                                                                 title="${u.status ? 'Vô hiệu hóa' : 'Kích hoạt'}">
                                                             <i class="bi ${u.status ? 'bi-x-circle' : 'bi-check-circle'}"></i>
                                                         </button>
                                                     </form>
                                                     
                                                     <!-- Change Role Dropdown -->
-                                                    <div class="dropdown d-inline">
-                                                        <button class="btn btn-outline-primary dropdown-toggle" type="button" 
-                                                                data-bs-toggle="dropdown" title="Đổi vai trò">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-sm btn-outline-primary dropdown-toggle" type="button" 
+                                                                data-bs-toggle="dropdown" aria-expanded="false" title="Đổi vai trò">
                                                             <i class="bi bi-person-gear"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end">
                                                             <li>
-                                                                <form method="post" action="${pageContext.request.contextPath}/manage/users">
-                                                                    <input type="hidden" name="action" value="updateRole">
-                                                                    <input type="hidden" name="userId" value="${u.id}">
-                                                                    <input type="hidden" name="role" value="CUSTOMER">
-                                                                    <button type="submit" class="dropdown-item ${u.role == 'CUSTOMER' ? 'active' : ''}">
-                                                                        Customer
-                                                                    </button>
-                                                                </form>
+                                                                <a class="dropdown-item ${u.role == 'CUSTOMER' ? 'active' : ''}" href="#"
+                                                                   onclick="changeRole(${u.id}, 'CUSTOMER'); return false;">
+                                                                    <i class="bi bi-person me-2"></i>Customer
+                                                                </a>
                                                             </li>
                                                             <li>
-                                                                <form method="post" action="${pageContext.request.contextPath}/manage/users">
-                                                                    <input type="hidden" name="action" value="updateRole">
-                                                                    <input type="hidden" name="userId" value="${u.id}">
-                                                                    <input type="hidden" name="role" value="STAFF">
-                                                                    <button type="submit" class="dropdown-item ${u.role == 'STAFF' ? 'active' : ''}">
-                                                                        Staff
-                                                                    </button>
-                                                                </form>
+                                                                <a class="dropdown-item ${u.role == 'STAFF' ? 'active' : ''}" href="#"
+                                                                   onclick="changeRole(${u.id}, 'STAFF'); return false;">
+                                                                    <i class="bi bi-person-badge me-2"></i>Staff
+                                                                </a>
                                                             </li>
                                                             <li>
-                                                                <form method="post" action="${pageContext.request.contextPath}/manage/users">
-                                                                    <input type="hidden" name="action" value="updateRole">
-                                                                    <input type="hidden" name="userId" value="${u.id}">
-                                                                    <input type="hidden" name="role" value="ADMIN">
-                                                                    <button type="submit" class="dropdown-item ${u.role == 'ADMIN' ? 'active' : ''}">
-                                                                        Admin
-                                                                    </button>
-                                                                </form>
+                                                                <a class="dropdown-item ${u.role == 'ADMIN' ? 'active' : ''}" href="#"
+                                                                   onclick="changeRole(${u.id}, 'ADMIN'); return false;">
+                                                                    <i class="bi bi-person-fill-gear me-2"></i>Admin
+                                                                </a>
                                                             </li>
                                                         </ul>
                                                     </div>
                                                 </div>
+                                                
+                                                <!-- Hidden form for role change -->
+                                                <form id="roleForm${u.id}" method="post" action="${pageContext.request.contextPath}/manage/users" style="display:none;">
+                                                    <input type="hidden" name="action" value="updateRole">
+                                                    <input type="hidden" name="userId" value="${u.id}">
+                                                    <input type="hidden" name="role" id="roleInput${u.id}" value="">
+                                                </form>
                                             </td>
                                         </tr>
                                     </c:forEach>
@@ -179,5 +174,16 @@
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Function to change user role via hidden form
+        function changeRole(userId, role) {
+            var form = document.getElementById('roleForm' + userId);
+            var roleInput = document.getElementById('roleInput' + userId);
+            if (form && roleInput) {
+                roleInput.value = role;
+                form.submit();
+            }
+        }
+    </script>
 </body>
 </html>

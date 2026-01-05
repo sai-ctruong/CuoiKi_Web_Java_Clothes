@@ -3,9 +3,9 @@
 <footer class="footer">
     <div class="container">
         <div class="row">
-            <div class="col-lg-4 mb-4">
+            <div class="col-lg-3 mb-4">
                 <h5><i class="bi bi-bag-heart text-gold me-2"></i>Clothing Shop</h5>
-                <p>Thời trang cao cấp với giá cả hợp lý. Phong cách hiện đại, xu hướng mới nhất.</p>
+                <p class="small">Thời trang cao cấp với giá cả hợp lý. Phong cách hiện đại, xu hướng mới nhất.</p>
                 <div class="footer-social">
                     <a href="#"><i class="bi bi-facebook"></i></a>
                     <a href="#"><i class="bi bi-instagram"></i></a>
@@ -24,16 +24,16 @@
             </div>
             <div class="col-lg-3 col-md-4 mb-4">
                 <h5>Hỗ Trợ</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2"><a href="#">FAQ</a></li>
-                    <li class="mb-2"><a href="#">Chính Sách Giao Hàng</a></li>
-                    <li class="mb-2"><a href="#">Chính Sách Đổi Trả</a></li>
-                    <li class="mb-2"><a href="#">Điều Khoản Sử Dụng</a></li>
+                <ul class="list-unstyled small">
+                    <li class="mb-2"><i class="bi bi-truck text-gold me-2"></i>Miễn phí ship đơn từ 500K</li>
+                    <li class="mb-2"><i class="bi bi-arrow-repeat text-gold me-2"></i>Đổi trả trong 7 ngày</li>
+                    <li class="mb-2"><i class="bi bi-shield-check text-gold me-2"></i>Cam kết chính hãng 100%</li>
+                    <li class="mb-2"><i class="bi bi-credit-card text-gold me-2"></i>Thanh toán khi nhận hàng</li>
                 </ul>
             </div>
-            <div class="col-lg-3 col-md-4 mb-4">
+            <div class="col-lg-4 col-md-4 mb-4">
                 <h5>Liên Hệ</h5>
-                <ul class="list-unstyled">
+                <ul class="list-unstyled small">
                     <li class="mb-2"><i class="bi bi-geo-alt text-gold me-2"></i>Số 1 Võ Văn Ngân, Thủ Đức, TP.HCM</li>
                     <li class="mb-2"><i class="bi bi-telephone text-gold me-2"></i>1900 1234</li>
                     <li class="mb-2"><i class="bi bi-envelope text-gold me-2"></i>info@clothingshop.com</li>
@@ -44,10 +44,6 @@
         <hr style="border-color: rgba(255,255,255,0.1);">
         <div class="d-flex flex-wrap justify-content-between align-items-center">
             <p class="mb-0 small">© <%= java.time.Year.now().getValue() %> Clothing Shop. All rights reserved.</p>
-            <div class="d-flex gap-3">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" height="24">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Mastercard-logo.png" alt="Mastercard" height="24">
-            </div>
         </div>
     </div>
 </footer>

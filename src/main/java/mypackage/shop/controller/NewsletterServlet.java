@@ -68,12 +68,8 @@ public class NewsletterServlet extends HttpServlet {
         }
         
         try {
-            System.out.println("=== NEWSLETTER SUBSCRIBE ===");
-            System.out.println("Email: " + email);
-            
             // Find user by email
             User user = userDAO.findByEmail(email);
-            System.out.println("User found: " + (user != null ? user.getUsername() : "NULL"));
             
             if (user == null) {
                 // Email chưa có tài khoản - khuyến khích đăng ký
@@ -85,7 +81,6 @@ public class NewsletterServlet extends HttpServlet {
             
             // Find the welcome voucher
             Voucher welcomeVoucher = voucherDAO.findByCode(WELCOME_VOUCHER_CODE);
-            System.out.println("Voucher found: " + (welcomeVoucher != null ? welcomeVoucher.getCode() : "NULL"));
             
             if (welcomeVoucher == null) {
                 session.setAttribute("errorMessage", "Voucher không khả dụng. Vui lòng thử lại sau!");
@@ -95,7 +90,6 @@ public class NewsletterServlet extends HttpServlet {
             
             // Check if user already has this voucher
             UserVoucher existingVoucher = userVoucherDAO.getUserVoucher(user.getId(), welcomeVoucher.getId());
-            System.out.println("Existing voucher: " + (existingVoucher != null ? "YES" : "NO"));
             
             if (existingVoucher != null) {
                 session.setAttribute("errorMessage", 
@@ -106,17 +100,14 @@ public class NewsletterServlet extends HttpServlet {
             
             // Assign voucher to user
             boolean success = assignVoucherToUser(user, welcomeVoucher);
-            System.out.println("Voucher assigned: " + success);
             
             if (success) {
                 // Send email with voucher
-                System.out.println("Sending email to: " + email);
                 boolean emailSent = mypackage.shop.utils.EmailUtils.sendVoucherEmail(
                     email, 
                     WELCOME_VOUCHER_CODE, 
                     welcomeVoucher.getDiscountPercent()
                 );
-                System.out.println("Email sent: " + emailSent);
                 
                 if (emailSent) {
                     session.setAttribute("successMessage", 
