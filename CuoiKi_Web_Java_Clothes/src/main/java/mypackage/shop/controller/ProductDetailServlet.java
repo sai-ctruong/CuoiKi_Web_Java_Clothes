@@ -34,7 +34,7 @@ public class ProductDetailServlet extends HttpServlet {
         String idParam = request.getParameter("id");
         
         if (idParam == null || idParam.isEmpty()) {
-            System.out.println("ProductDetailServlet: No ID parameter provided");
+
             request.getSession().setAttribute("errorMessage", "Không tìm thấy ID sản phẩm. URL phải có dạng: /product?id=1");
             response.sendRedirect(request.getContextPath() + "/home");
             return;
@@ -42,13 +42,13 @@ public class ProductDetailServlet extends HttpServlet {
         
         try {
             int productId = Integer.parseInt(idParam);
-            System.out.println("ProductDetailServlet: Looking for product ID: " + productId);
+
             
             Product product = productDAO.getProductById(productId);
-            System.out.println("ProductDetailServlet: Product found: " + (product != null ? product.getName() : "null"));
+
             
             if (product == null) {
-                System.out.println("ProductDetailServlet: Product not found for ID: " + productId);
+
                 request.getSession().setAttribute("errorMessage", 
                     "Không tìm thấy sản phẩm với ID: " + productId + ". " +
                     "Có thể sản phẩm không tồn tại hoặc database chưa có dữ liệu. " +
@@ -66,7 +66,7 @@ public class ProductDetailServlet extends HttpServlet {
                 reviews = reviewDAO.getReviewsByProductId(productId);
                 avgRating = reviewDAO.getAverageRating(productId);
                 reviewCount = reviewDAO.countReviews(productId);
-                System.out.println("ProductDetailServlet: Reviews loaded: " + (reviews != null ? reviews.size() : 0));
+
             } catch (Exception e) {
                 System.err.println("ProductDetailServlet: Error loading reviews: " + e.getMessage());
                 reviews = List.of(); // Empty list as fallback
@@ -94,7 +94,7 @@ public class ProductDetailServlet extends HttpServlet {
             request.setAttribute("canReview", canReview);
             request.setAttribute("hasReviewed", hasReviewed);
             
-            System.out.println("ProductDetailServlet: Forwarding to product-detail.jsp");
+
             request.getRequestDispatcher("/product-detail.jsp").forward(request, response);
             
         } catch (NumberFormatException e) {

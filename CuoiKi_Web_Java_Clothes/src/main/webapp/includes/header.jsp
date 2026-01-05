@@ -118,77 +118,50 @@ function updateCartCount(count) {
 
 // Initialize dropdown when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 Initializing user dropdown...');
-    
     var userBtn = document.getElementById('userDropdown');
     var userMenu = document.getElementById('userDropdownMenu');
     
-    if (!userBtn || !userMenu) {
-        console.log('ℹ️ User dropdown elements not found (user not logged in?)');
-        return;
-    }
+    if (!userBtn || !userMenu) return;
     
-    console.log('✅ User dropdown elements found');
-    
-    // Add click event to button
+    // Toggle dropdown on click
     userBtn.addEventListener('click', function(e) {
         e.preventDefault();
         e.stopPropagation();
         
-        console.log('🔥 User dropdown button clicked!');
-        
-        // Close all other dropdowns first
-        document.querySelectorAll('.user-dropdown-menu.show').forEach(function(otherMenu) {
-            if (otherMenu !== userMenu) {
-                otherMenu.classList.remove('show');
-                console.log('🔒 Closed other dropdown');
-            }
+        // Close other dropdowns
+        document.querySelectorAll('.user-dropdown-menu.show').forEach(function(m) {
+            if (m !== userMenu) m.classList.remove('show');
         });
         
-        // Toggle current dropdown
+        // Toggle current
         var isVisible = userMenu.classList.contains('show');
-        if (isVisible) {
-            userMenu.classList.remove('show');
-            userBtn.setAttribute('aria-expanded', 'false');
-            console.log('🔒 Dropdown closed');
-        } else {
-            userMenu.classList.add('show');
-            userBtn.setAttribute('aria-expanded', 'true');
-            console.log('🔓 Dropdown opened');
-        }
+        userMenu.classList.toggle('show', !isVisible);
+        userBtn.setAttribute('aria-expanded', !isVisible);
     });
     
-    // Close dropdown when clicking outside
+    // Close on outside click
     document.addEventListener('click', function(e) {
         if (!userBtn.contains(e.target) && !userMenu.contains(e.target)) {
-            if (userMenu.classList.contains('show')) {
-                userMenu.classList.remove('show');
-                userBtn.setAttribute('aria-expanded', 'false');
-                console.log('🔒 Dropdown closed (outside click)');
-            }
+            userMenu.classList.remove('show');
+            userBtn.setAttribute('aria-expanded', 'false');
         }
     });
     
-    // Close dropdown when pressing Escape
+    // Close on Escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && userMenu.classList.contains('show')) {
             userMenu.classList.remove('show');
             userBtn.setAttribute('aria-expanded', 'false');
             userBtn.focus();
-            console.log('🔒 Dropdown closed (ESC key)');
         }
     });
     
-    // Handle dropdown item clicks
+    // Close after item click
     userMenu.querySelectorAll('.user-dropdown-item').forEach(function(item) {
         item.addEventListener('click', function() {
-            console.log('📝 Dropdown item clicked:', this.textContent.trim());
-            // Close dropdown after clicking an item
             userMenu.classList.remove('show');
             userBtn.setAttribute('aria-expanded', 'false');
         });
     });
-    
-    console.log('✅ User dropdown initialized successfully');
 });
 </script>

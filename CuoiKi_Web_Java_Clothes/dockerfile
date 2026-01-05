@@ -1,15 +1,18 @@
-# Dockerfile này đặt TRONG thư mục CuoiKi_Web_Java_Clothes
+# Dockerfile
 
 FROM maven:3.9-eclipse-temurin-11 AS build
 WORKDIR /app
 COPY . .
-# Vì đã set Root Directory, ta chỉ cần gọi pom.xml trực tiếp
-RUN mvn clean package -DskipTests
+RUN mvn clean package -DskipTests -f CuoiKi_Web_Java_Clothes/pom.xml
 
 FROM tomcat:10.1-jdk11-temurin-focal
+
+
+ENV JAVA_OPTS="-Xms300m -Xmx300m"
+# -------------------------------------
+
 RUN rm -rf /usr/local/tomcat/webapps/*
-# Copy file war từ target (không cần tên thư mục cha nữa)
-COPY --from=build /app/target/ProjectCuoiKi_Clothes-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
+COPY --from=build /app/CuoiKi_Web_Java_Clothes/target/ProjectCuoiKi_Clothes-1.0-SNAPSHOT.war /usr/local/tomcat/webapps/ROOT.war
 
 EXPOSE 8080
 CMD ["catalina.sh", "run"]

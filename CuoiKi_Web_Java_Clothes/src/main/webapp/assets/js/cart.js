@@ -226,11 +226,18 @@
      * Update cart badge count
      */
     function updateCartBadge(count) {
-        let badge = document.querySelector('.cart-badge, .bi-cart3 + .badge, .position-absolute.badge');
-        const cartLink = document.querySelector('.bi-cart3, .bi-cart')?.closest('a');
+        // First try to find by ID (header.jsp uses #cart-count)
+        let badge = document.getElementById('cart-count');
+        
+        // Fallback to other selectors
+        if (!badge) {
+            badge = document.querySelector('.cart-badge, .action-badge, .bi-cart + .badge, .position-absolute.badge');
+        }
+        
+        const cartLink = document.querySelector('[href*="/cart"], .bi-bag')?.closest('a');
         
         if (!badge && cartLink) {
-            badge = cartLink.querySelector('.badge');
+            badge = cartLink.querySelector('.badge, .action-badge');
         }
         
         if (count > 0) {
@@ -240,18 +247,22 @@
                 badge.textContent = displayCount;
                 badge.style.display = '';
                 badge.style.animation = 'none';
-                badge.offsetHeight;
+                badge.offsetHeight; // Trigger reflow
                 badge.style.animation = 'cartPulse 0.5s ease';
             } else if (cartLink) {
                 const newBadge = document.createElement('span');
-                newBadge.className = 'position-absolute top-0 start-100 translate-middle badge rounded-pill';
-                newBadge.style.cssText = 'background:var(--accent-color,#d4a24c);color:var(--text-dark,#1a1a1a);font-size:0.65rem;';
+                newBadge.className = 'action-badge';
+                newBadge.id = 'cart-count';
                 newBadge.textContent = displayCount;
-                cartLink.style.position = 'relative';
                 cartLink.appendChild(newBadge);
             }
         } else if (badge) {
-            badge.style.display = 'none';
+            badge.textContent = '0';
+        }
+        
+        // Also call header's updateCartCount if available (for sync)
+        if (typeof window.updateCartCount === 'function') {
+            window.updateCartCount(count);
         }
     }
 

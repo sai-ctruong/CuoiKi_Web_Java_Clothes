@@ -88,9 +88,15 @@ public class ManageUserServlet extends HttpServlet {
                     } else {
                         session.setAttribute("errorMessage", "Không thể cập nhật vai trò!");
                     }
+                } else {
+                    session.setAttribute("errorMessage", "Không tìm thấy người dùng!");
                 }
             } catch (NumberFormatException e) {
                 session.setAttribute("errorMessage", "ID người dùng không hợp lệ!");
+            } catch (Exception e) {
+                System.err.println("Error updating role: " + e.getMessage());
+                e.printStackTrace();
+                session.setAttribute("errorMessage", "Lỗi: " + e.getMessage());
             }
         } else if ("toggleStatus".equals(action)) {
             try {

@@ -45,7 +45,7 @@
         initializeProductInteractions();
         initializeBackToTop();
         initializeLazyLoading();
-        console.log('🎉 Clothing Shop initialized successfully!');
+        // Initialized
     }
 
     /**
