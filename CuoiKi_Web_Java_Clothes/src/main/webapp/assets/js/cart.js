@@ -134,17 +134,26 @@
         updateCartBadge(currentCount + 1);
         
 // --- BACKGROUND SERVER REQUEST ---
-        // SỬA LỖI: Kiểm tra xem đang chạy Local hay Render
-        let contextPath = window.location.pathname.split('/')[1] || '';
-        
-        // Nếu đoạn text lấy được có chứa dấu chấm (.) (ví dụ: index.jsp, products.jsp)
-        // Nghĩa là ta đang ở Root (Render), không phải thư mục dự án (Local)
-        if (contextPath.includes('.') || contextPath === 'cart' || contextPath === 'product') {
-            contextPath = '';
+        // SỬA LỖI: Sử dụng contextPath từ JSP hoặc tự động detect
+        // Ưu tiên sử dụng biến global contextPath nếu đã được set từ JSP
+        let basePath = '';
+        if (typeof window.contextPath !== 'undefined' && window.contextPath) {
+            basePath = window.contextPath;
+        } else {
+            // Fallback: detect từ URL
+            const pathParts = window.location.pathname.split('/');
+            const firstPart = pathParts[1] || '';
+            // Nếu firstPart là file JSP hoặc là các route của app thì contextPath = ''
+            const appRoutes = ['cart', 'product', 'products', 'login', 'register', 'checkout', 'order', 'admin', 'profile', 'wishlist', 'search', 'about', 'contact'];
+            if (firstPart.includes('.') || appRoutes.includes(firstPart) || firstPart === '') {
+                basePath = '';
+            } else {
+                basePath = '/' + firstPart;
+            }
         }
         
         // Tạo URL chuẩn
-        const url = (contextPath ? '/' + contextPath : '') + '/cart/add?id=' + productId + '&ajax=true';
+        const url = basePath + '/cart/add?id=' + productId + '&ajax=true';
         
         fetch(url, {
             method: 'GET',
@@ -165,8 +174,8 @@
                 // Revert optimistic update
                 updateCartBadge(currentCount); 
                 
-                // Redirect to login
-                window.location.href = (contextPath ? '/' + contextPath : '') + '/login';
+                // Redirect to login - sử dụng basePath đã được tính ở trên
+                window.location.href = basePath + '/login';
                 return;
             } else {
                 // Revert optimistic update on error

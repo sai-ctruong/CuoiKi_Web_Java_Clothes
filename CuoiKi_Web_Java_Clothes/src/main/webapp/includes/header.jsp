@@ -1,6 +1,11 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="jakarta.tags.core" %>
 
+<script>
+    // Set contextPath global variable for JavaScript files
+    window.contextPath = '${pageContext.request.contextPath}';
+</script>
+
 <header class="main-header">
     <div class="container">
         <div class="header-content">
