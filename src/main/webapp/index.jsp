@@ -122,10 +122,29 @@
                     <c:when test="${not empty featuredProducts}">
                         <c:forEach items="${featuredProducts}" var="product" varStatus="status">
                             <div class="product-card">
-                                <c:if test="${status.index < 3}">
-                                    <span class="product-badge ${status.index == 0 ? 'badge-hot' : status.index == 1 ? 'badge-new' : 'badge-sale'}">
-                                        ${status.index == 0 ? 'Hot' : status.index == 1 ? 'Mới' : '-20%'}
-                                    </span>
+                                <c:if test="${status.index < 4}">
+                                    <c:choose>
+                                        <c:when test="${status.index == 0}">
+                                            <span class="product-badge badge-bestseller">
+                                                <i class="bi bi-fire me-1"></i>Bán Chạy
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${status.index == 1}">
+                                            <span class="product-badge badge-new">
+                                                <i class="bi bi-star-fill me-1"></i>Mới Nhất
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${status.index == 2}">
+                                            <span class="product-badge badge-premium">
+                                                <i class="bi bi-gem me-1"></i>Cao Cấp
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${status.index == 3}">
+                                            <span class="product-badge badge-limited">
+                                                <i class="bi bi-lightning-fill me-1"></i>Giới Hạn
+                                            </span>
+                                        </c:when>
+                                    </c:choose>
                                 </c:if>
                                 
                                 <div class="product-img-wrapper">
@@ -168,10 +187,29 @@
                         <!-- Demo products when no data -->
                         <c:forEach begin="1" end="8" var="p">
                             <div class="product-card">
-                                <c:if test="${p <= 3}">
-                                    <span class="product-badge ${p == 1 ? 'badge-hot' : p == 2 ? 'badge-new' : 'badge-sale'}">
-                                        ${p == 1 ? 'Hot' : p == 2 ? 'Mới' : '-20%'}
-                                    </span>
+                                <c:if test="${p <= 4}">
+                                    <c:choose>
+                                        <c:when test="${p == 1}">
+                                            <span class="product-badge badge-bestseller">
+                                                <i class="bi bi-fire me-1"></i>Bán Chạy
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${p == 2}">
+                                            <span class="product-badge badge-new">
+                                                <i class="bi bi-star-fill me-1"></i>Mới Nhất
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${p == 3}">
+                                            <span class="product-badge badge-premium">
+                                                <i class="bi bi-gem me-1"></i>Cao Cấp
+                                            </span>
+                                        </c:when>
+                                        <c:when test="${p == 4}">
+                                            <span class="product-badge badge-limited">
+                                                <i class="bi bi-lightning-fill me-1"></i>Giới Hạn
+                                            </span>
+                                        </c:when>
+                                    </c:choose>
                                 </c:if>
                                 
                                 <div class="product-img-wrapper">
@@ -320,12 +358,14 @@
             </div>
             
             <div class="row g-4">
+                <!-- Main Categories Row -->
                 <div class="col-lg-6">
                     <div class="category-card category-card-large">
-                        <img src="https://images.unsplash.com/photo-1617137968427-85924c800a22?w=800" alt="Nam">
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800" alt="Áo Thun">
                         <div class="category-overlay">
-                            <h3 class="text-white font-serif fst-italic">Thời Trang Nam</h3>
-                            <a href="${pageContext.request.contextPath}/category?id=1" class="btn btn-gold">
+                            <h3 class="text-white font-serif fst-italic">Áo Thun</h3>
+                            <p class="text-white-50 mb-3">Phong cách thoải mái, năng động</p>
+                            <a href="${pageContext.request.contextPath}/products?id=1" class="btn btn-gold">
                                 Khám Phá <i class="bi bi-arrow-right ms-2"></i>
                             </a>
                         </div>
@@ -333,12 +373,85 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="category-card category-card-large">
-                        <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600" alt="Nữ">
+                        <img src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?w=600" alt="Váy Đầm">
                         <div class="category-overlay">
-                            <h3 class="text-white font-serif fst-italic">Thời Trang Nữ</h3>
-                            <a href="${pageContext.request.contextPath}/category?id=2" class="btn btn-gold">
+                            <h3 class="text-white font-serif fst-italic">Váy Đầm Thanh Lịch</h3>
+                            <p class="text-white-50 mb-3">Nữ tính, quyến rũ mọi hoàn cảnh</p>
+                            <a href="${pageContext.request.contextPath}/products?id=4" class="btn btn-gold">
                                 Khám Phá <i class="bi bi-arrow-right ms-2"></i>
                             </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Secondary Categories Row -->
+                <div class="col-lg-6 col-md-6">
+                    <div class="category-card category-card-medium">
+                        <img src="https://images.unsplash.com/photo-1542272604-787c3835535d?w=500" alt="Quần Jean">
+                        <div class="category-overlay">
+                            <h4 class="text-white font-serif">Quần Jean</h4>
+                            <p class="text-white-50 small mb-2">Phong cách trẻ trung, năng động</p>
+                            <a href="${pageContext.request.contextPath}/products?id=2" class="btn btn-outline-light btn-sm">
+                                Xem Ngay
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="category-card category-card-medium">
+                        <img src="https://images.unsplash.com/photo-1551028719-00167b16eac5?w=500" alt="Áo Khoác">
+                        <div class="category-overlay">
+                            <h4 class="text-white font-serif">Áo Khoác</h4>
+                            <p class="text-white-50 small mb-2">Ấm áp, thời thượng cho mọi mùa</p>
+                            <a href="${pageContext.request.contextPath}/products?id=3" class="btn btn-outline-light btn-sm">
+                                Xem Ngay
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Special Collections -->
+                <div class="col-12 mt-4">
+                    <div class="row g-3">
+                        <div class="col-lg-3 col-md-6">
+                            <div class="collection-card">
+                                <div class="collection-icon">
+                                    <i class="bi bi-star-fill"></i>
+                                </div>
+                                <h5>Bộ Sưu Tập Mới</h5>
+                                <p class="text-muted small">Xu hướng thời trang 2026</p>
+                                <a href="${pageContext.request.contextPath}/products" class="stretched-link"></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="collection-card">
+                                <div class="collection-icon">
+                                    <i class="bi bi-fire"></i>
+                                </div>
+                                <h5>Bán Chạy Nhất</h5>
+                                <p class="text-muted small">Được yêu thích nhất</p>
+                                <a href="${pageContext.request.contextPath}/products" class="stretched-link"></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="collection-card">
+                                <div class="collection-icon">
+                                    <i class="bi bi-gem"></i>
+                                </div>
+                                <h5>Cao Cấp</h5>
+                                <p class="text-muted small">Chất lượng premium</p>
+                                <a href="${pageContext.request.contextPath}/products" class="stretched-link"></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-6">
+                            <div class="collection-card">
+                                <div class="collection-icon">
+                                    <i class="bi bi-percent"></i>
+                                </div>
+                                <h5>Khuyến Mãi</h5>
+                                <p class="text-muted small">Giá ưu đãi đặc biệt</p>
+                                <a href="${pageContext.request.contextPath}/products" class="stretched-link"></a>
+                            </div>
                         </div>
                     </div>
                 </div>

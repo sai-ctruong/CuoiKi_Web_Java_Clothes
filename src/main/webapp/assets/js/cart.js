@@ -116,16 +116,17 @@
         }
         
         // 2. Optimistically Update Badge
-        // Get current count
-        let currentBadge = document.querySelector('.cart-badge, .bi-cart3 + .badge, .position-absolute.badge');
+        // Get current count - First try #cart-count (from header.jsp), then other selectors
+        let currentBadge = document.getElementById('cart-count') || 
+                           document.querySelector('.action-badge, .cart-badge, .position-absolute.badge');
         let currentCount = 0;
         if (currentBadge) {
             currentCount = parseInt(currentBadge.textContent) || 0;
         } else {
             // Try to parse from cart link if badge invalid
-             const cartLink = document.querySelector('.bi-cart3, .bi-cart')?.closest('a');
+             const cartLink = document.querySelector('.bi-bag, .bi-cart3, .bi-cart')?.closest('a');
              if (cartLink) {
-                 const badge = cartLink.querySelector('.badge');
+                 const badge = cartLink.querySelector('.action-badge, .badge');
                  if (badge) currentCount = parseInt(badge.textContent) || 0;
              }
         }

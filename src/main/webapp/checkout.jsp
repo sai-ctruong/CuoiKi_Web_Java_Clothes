@@ -61,24 +61,30 @@
         .page-header {
             text-align: center;
             margin-bottom: 3rem;
-            background: rgba(255, 255, 255, 0.9);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
             backdrop-filter: blur(10px);
             padding: 2rem;
             border-radius: var(--radius-xl);
             box-shadow: var(--shadow-md);
+            color: var(--white);
         }
         
         .page-title {
             font-family: 'Playfair Display', serif;
             font-size: 2.8rem;
             font-weight: 700;
-            color: var(--primary-color);
+            color: var(--white);
             margin-bottom: 0.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .page-title i {
+            color: var(--accent-color);
+            filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
         }
         
         .page-subtitle {
-            color: var(--text-body);
+            color: rgba(255, 255, 255, 0.9);
             font-size: 1.2rem;
             font-weight: 400;
         }
@@ -174,6 +180,36 @@
             border-radius: var(--radius-lg);
             transition: var(--transition);
             border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        .order-items {
+            max-height: none; /* Bỏ giới hạn chiều cao */
+        }
+        
+        /* Nếu có quá nhiều sản phẩm (>8), thêm scroll */
+        .order-items.many-items {
+            max-height: 600px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+        
+        /* Custom scrollbar */
+        .order-items.many-items::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .order-items.many-items::-webkit-scrollbar-track {
+            background: var(--light-bg);
+            border-radius: 3px;
+        }
+        
+        .order-items.many-items::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 3px;
+        }
+        
+        .order-items.many-items::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-dark);
         }
         
         .order-item:hover {
@@ -847,11 +883,15 @@
                     <div class="col-lg-5">
                         <div class="checkout-card" data-aos="fade-left">
                             <div class="checkout-header">
-                                <h4><i class="bi bi-bag-check me-3"></i>Đơn Hàng (${cartItems.size()} sản phẩm)</h4>
+                                <c:set var="totalItemCount" value="0" />
+                                <c:forEach items="${cartItems}" var="cartItem">
+                                    <c:set var="totalItemCount" value="${totalItemCount + cartItem.quantity}" />
+                                </c:forEach>
+                                <h4><i class="bi bi-bag-check me-3"></i>Đơn Hàng (${totalItemCount} sản phẩm)</h4>
                             </div>
                             <div class="checkout-body">
                                 <!-- Items -->
-                                <div class="order-items mb-4" style="max-height: 400px; overflow-y: auto;">
+                                <div class="order-items mb-4">
                                     <c:forEach items="${cartItems}" var="item" varStatus="status">
                                         <div class="order-item" data-aos="fade-up" data-aos-delay="${status.index * 100}">
                                             <c:choose>
@@ -945,6 +985,16 @@
             duration: 800,
             once: true,
             offset: 100
+        });
+        
+        // Check if there are many items and add scroll if needed
+        document.addEventListener('DOMContentLoaded', function() {
+            const orderItems = document.querySelector('.order-items');
+            const itemCount = orderItems.querySelectorAll('.order-item').length;
+            
+            if (itemCount > 8) {
+                orderItems.classList.add('many-items');
+            }
         });
         
         function selectPayment(el) {

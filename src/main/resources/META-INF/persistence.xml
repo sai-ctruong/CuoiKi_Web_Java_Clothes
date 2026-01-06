@@ -20,6 +20,7 @@
         <class>mypackage.shop.model.Voucher</class>
         <class>mypackage.shop.model.Wishlist</class>
         <class>mypackage.shop.model.UserVoucher</class>
+        <class>mypackage.shop.model.PasswordResetToken</class>
         
         <properties>
             <!-- Database connection -->
@@ -31,7 +32,7 @@
             
             <!-- Hibernate settings -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="validate"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             

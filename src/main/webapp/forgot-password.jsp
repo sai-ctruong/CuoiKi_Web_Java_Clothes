@@ -26,36 +26,71 @@
             min-height: 100vh;
             display: flex;
             align-items: center;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, var(--primary-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .auth-bg {
+            position: absolute;
+            inset: 0;
+            background: 
+                linear-gradient(135deg, rgba(26, 26, 26, 0.85) 0%, rgba(26, 26, 26, 0.75) 100%),
+                url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920') center/cover no-repeat;
+            filter: blur(2px);
+            transform: scale(1.02);
+            pointer-events: none;
+        }
+        
+        .auth-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(201, 169, 98, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(201, 169, 98, 0.2) 0%, transparent 50%);
         }
         
         .auth-card {
-            background: var(--text-white);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
+            background: var(--text-white, #fff);
+            border-radius: var(--radius-lg, 16px);
+            box-shadow: var(--shadow-lg, 0 25px 50px -12px rgba(0,0,0,0.25));
             overflow: hidden;
             max-width: 450px;
             width: 100%;
             margin: 2rem auto;
+            position: relative;
+            z-index: 1;
         }
         
         .auth-header {
-            background: var(--bg-dark);
-            color: var(--text-white);
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: white;
             padding: 2rem;
             text-align: center;
+            position: relative;
+        }
+        
+        .auth-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background: white;
+            border-radius: 50% 50% 0 0 / 100% 100% 0 0;
         }
         
         .auth-header h2 {
-            font-family: 'Cormorant Garamond', serif;
+            font-family: 'Playfair Display', serif;
             font-style: italic;
-            font-size: 2rem;
+            font-size: 1.75rem;
             margin-bottom: 0.5rem;
-            color: var(--text-white);
+            color: white;
         }
         
         .auth-header p {
-            color: var(--text-muted);
+            color: rgba(255, 255, 255, 0.7);
             font-size: 0.9rem;
             margin: 0;
         }
@@ -65,69 +100,78 @@
         }
         
         .form-floating > label {
-            font-family: 'Montserrat', sans-serif;
-            color: var(--text-muted);
+            color: #6c757d;
         }
         
         .form-control:focus {
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 0.2rem rgba(212, 162, 76, 0.25);
+            border-color: #c9a962;
+            box-shadow: 0 0 0 0.2rem rgba(201, 169, 98, 0.25);
         }
         
         .btn-auth {
-            background: var(--accent-color);
+            background: #c9a962;
             border: none;
-            color: var(--text-dark);
-            font-family: 'Montserrat', sans-serif;
+            color: white;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
-            padding: 0.8rem 1.5rem;
+            padding: 0.875rem 1.5rem;
             width: 100%;
-            transition: var(--transition-normal);
+            border-radius: 8px;
+            transition: all 0.3s ease;
         }
         
         .btn-auth:hover {
-            background: var(--accent-hover);
-            color: var(--text-dark);
+            background: #b8943a;
+            color: white;
             transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(201, 169, 98, 0.3);
         }
         
         .auth-footer {
             text-align: center;
-            padding: 1.5rem 2rem;
-            background: var(--bg-cream);
-            border-top: 1px solid #dee2e6;
+            padding: 1.25rem 2rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
         }
         
         .auth-footer a {
-            color: var(--accent-color);
+            color: #c9a962;
             font-weight: 600;
+            text-decoration: none;
         }
         
         .auth-footer a:hover {
-            color: var(--accent-dark);
+            color: #b8943a;
             text-decoration: underline;
         }
         
         .back-home {
             position: absolute;
-            top: 1rem;
-            left: 1rem;
-            color: var(--text-white);
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            top: 1.5rem;
+            left: 1.5rem;
+            padding: 0.6rem 1.25rem;
+            background: white;
+            border-radius: 50px;
+            color: #1a1a1a;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 10;
+            text-decoration: none;
         }
         
         .back-home:hover {
-            color: var(--accent-color);
+            background: #c9a962;
+            color: white;
+            transform: translateX(-5px);
         }
     </style>
 </head>
 <body>
     <div class="auth-page position-relative">
+        <div class="auth-bg"></div>
+        
         <a href="${pageContext.request.contextPath}/home" class="back-home">
             <i class="bi bi-arrow-left"></i> Về trang chủ
         </a>
