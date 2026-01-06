@@ -133,8 +133,17 @@
         // Optimistic increment
         updateCartBadge(currentCount + 1);
         
-        // --- BACKGROUND SERVER REQUEST ---
-        const contextPath = window.location.pathname.split('/')[1] || '';
+// --- BACKGROUND SERVER REQUEST ---
+        // SỬA LỖI: Kiểm tra xem đang chạy Local hay Render
+        let contextPath = window.location.pathname.split('/')[1] || '';
+        
+        // Nếu đoạn text lấy được có chứa dấu chấm (.) (ví dụ: index.jsp, products.jsp)
+        // Nghĩa là ta đang ở Root (Render), không phải thư mục dự án (Local)
+        if (contextPath.includes('.') || contextPath === 'cart' || contextPath === 'product') {
+            contextPath = '';
+        }
+        
+        // Tạo URL chuẩn
         const url = (contextPath ? '/' + contextPath : '') + '/cart/add?id=' + productId + '&ajax=true';
         
         fetch(url, {
