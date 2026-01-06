@@ -293,12 +293,18 @@ a:hover { color: var(--gold); }
     border-radius: var(--radius);
     overflow: hidden;
     box-shadow: var(--shadow);
-    transition: var(--transition);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
 }
 
 .product-card:hover {
     transform: translateY(-8px);
     box-shadow: var(--shadow-lg);
+}
+
+/* Prevent badge from causing layout shifts */
+.product-card:hover .product-badge {
+    transform: scale(1.05);
 }
 
 .product-img-wrapper {
@@ -420,22 +426,74 @@ a:hover { color: var(--gold); }
     color: var(--gold-dark);
 }
 
-/* Product Badge */
+/* Product Badge - Improved Design */
 .product-badge {
     position: absolute;
     top: 1rem;
     left: 1rem;
-    padding: 0.35rem 0.75rem;
-    font-size: 0.65rem;
-    font-weight: 700;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.7rem;
+    font-weight: 600;
     text-transform: uppercase;
-    border-radius: 4px;
+    border-radius: 20px;
     z-index: 2;
+    display: flex;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.2);
 }
 
-.badge-hot { background: #e74c3c; color: #fff; }
-.badge-new { background: #27ae60; color: #fff; }
-.badge-sale { background: var(--gold); color: #fff; }
+.product-badge i {
+    font-size: 0.65rem;
+}
+
+/* Badge Variants */
+.badge-bestseller { 
+    background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+    color: #fff;
+    animation: pulse-glow 2s infinite;
+}
+
+.badge-new { 
+    background: linear-gradient(135deg, #51cf66, #40c057);
+    color: #fff;
+}
+
+.badge-premium { 
+    background: linear-gradient(135deg, #ffd43b, #fab005);
+    color: #fff;
+}
+
+.badge-limited { 
+    background: linear-gradient(135deg, #845ef7, #7048e8);
+    color: #fff;
+    animation: lightning-flash 3s infinite;
+}
+
+/* Animations */
+@keyframes pulse-glow {
+    0%, 100% { 
+        transform: scale(1);
+        box-shadow: 0 2px 8px rgba(255,107,107,0.3);
+    }
+    50% { 
+        transform: scale(1.05);
+        box-shadow: 0 4px 16px rgba(255,107,107,0.5);
+    }
+}
+
+@keyframes lightning-flash {
+    0%, 90%, 100% { opacity: 1; }
+    95% { opacity: 0.7; }
+}
+
+/* Remove old badge styles */
+.badge-hot, .badge-sale, .badge-trending {
+    display: none;
+}
 
 /* Product Grid */
 .product-grid {
@@ -688,6 +746,10 @@ a:hover { color: var(--gold); }
     .section-title { font-size: 1.75rem; }
     .category-card { height: 200px; }
     .category-card-small { height: 150px; }
+    .category-card-medium { 
+        height: 220px; 
+        margin-bottom: 1rem;
+    }
     .newsletter-box { padding: 1.5rem; }
 }
 /* ============================================
@@ -2581,4 +2643,200 @@ a:hover { color: var(--gold); }
     .auth-buttons .me-2 {
         margin-right: 0.25rem !important;
     }
+}
+
+/* ============================================
+   NEW CATEGORY & COLLECTION STYLES
+============================================ */
+
+/* Category Card Medium - Updated for 2 columns */
+.category-card-medium {
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    height: 280px;
+    transition: var(--transition);
+}
+
+.category-card-medium:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-lg);
+}
+
+.category-card-medium img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.category-card-medium:hover img {
+    transform: scale(1.1);
+}
+
+.category-card-medium .category-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, transparent 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 1.5rem;
+}
+
+.category-card-medium .category-overlay h4 {
+    color: #fff;
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.category-card-medium .category-overlay p {
+    margin-bottom: 1rem;
+}
+
+/* Collection Cards */
+.collection-card {
+    background: var(--bg-white);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(201, 169, 98, 0.1);
+}
+
+.collection-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(201, 169, 98, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.collection-card:hover::before {
+    left: 100%;
+}
+
+.collection-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--gold);
+}
+
+.collection-icon {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--gold), var(--gold-light));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+    font-size: 1.2rem;
+    color: #fff;
+    transition: var(--transition);
+}
+
+.collection-card:hover .collection-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.collection-card h5 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--text-dark);
+}
+
+.collection-card p {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.collection-card .stretched-link::after {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1;
+    content: "";
+}
+
+/* Badge Trending Style - Updated */
+.badge-trending {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: #fff;
+    display: none; /* Hide old trending badge */
+}
+
+/* Responsive adjustments */
+@media (max-width: 991.98px) {
+    .category-card-medium {
+        height: 220px;
+    }
+    
+    .collection-card {
+        padding: 1.25rem;
+    }
+    
+    .collection-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 1.1rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .category-card-medium {
+        height: 200px;
+        margin-bottom: 1rem;
+    }
+    
+    .collection-card {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .collection-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+    
+    .collection-card h5 {
+        font-size: 0.9rem;
+    }
+    
+    .collection-card p {
+        font-size: 0.8rem;
+    }
+}
+
+/* Enhanced category overlay for better readability */
+.category-overlay p.text-white-50 {
+    color: rgba(255, 255, 255, 0.8) !important;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+/* Button improvements in overlays */
+.category-overlay .btn-outline-light {
+    border-width: 1px;
+    font-size: 0.85rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+}
+
+.category-overlay .btn-outline-light:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.8);
+    transform: translateY(-2px);
 }

@@ -168,7 +168,6 @@
         /* Login Page Styles */
         .login-page {
             min-height: 100vh;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -181,9 +180,20 @@
             position: absolute;
             inset: 0;
             background: 
+                linear-gradient(135deg, rgba(26, 26, 26, 0.85) 0%, rgba(26, 26, 26, 0.75) 100%),
+                url('https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920') center/cover no-repeat;
+            filter: blur(2px);
+            transform: scale(1.02);
+            pointer-events: none;
+        }
+        
+        .auth-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
                 radial-gradient(circle at 20% 50%, rgba(201, 169, 98, 0.15) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(201, 169, 98, 0.2) 0%, transparent 50%);
-            pointer-events: none;
         }
         
         .back-home-btn {

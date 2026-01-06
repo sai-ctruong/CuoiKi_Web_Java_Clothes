@@ -247,4 +247,104 @@ public class EmailUtils {
         
         return html.toString();
     }
+    
+    /**
+     * Send password reset email
+     * @param toEmail Recipient email
+     * @param resetLink Full URL to reset password page with token
+     * @return true if sent successfully
+     */
+    public static boolean sendPasswordResetEmail(String toEmail, String resetLink) {
+        try {
+            Properties props = new Properties();
+            props.put("mail.smtp.host", SMTP_HOST);
+            props.put("mail.smtp.port", SMTP_PORT);
+            props.put("mail.smtp.auth", "true");
+            props.put("mail.smtp.starttls.enable", "true");
+            
+            Session session = Session.getInstance(props, new Authenticator() {
+                @Override
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(EMAIL_FROM, EMAIL_PASSWORD);
+                }
+            });
+            
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(EMAIL_FROM, "Clothing Shop"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail));
+            message.setSubject("🔐 Đặt lại mật khẩu - Clothing Shop");
+            
+            // Build HTML email content
+            String htmlContent = buildPasswordResetEmailHtml(resetLink);
+            message.setContent(htmlContent, "text/html; charset=UTF-8");
+            
+            Transport.send(message);
+            
+            System.out.println("Password reset email sent successfully to: " + toEmail);
+            return true;
+            
+        } catch (Exception e) {
+            System.err.println("Failed to send password reset email: " + e.getMessage());
+            e.printStackTrace();
+            return false;
+        }
+    }
+    
+    /**
+     * Build HTML content for password reset email
+     */
+    private static String buildPasswordResetEmailHtml(String resetLink) {
+        StringBuilder html = new StringBuilder();
+        
+        html.append("<!DOCTYPE html>");
+        html.append("<html><head><meta charset='UTF-8'></head><body>");
+        html.append("<div style='max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;'>");
+        
+        // Header
+        html.append("<div style='background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0;'>");
+        html.append("<h1 style='margin: 0; font-size: 24px;'>🔐 Clothing Shop</h1>");
+        html.append("<p style='margin: 10px 0 0 0; color: #ccc;'>Yêu cầu đặt lại mật khẩu</p>");
+        html.append("</div>");
+        
+        // Content
+        html.append("<div style='background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px;'>");
+        html.append("<p style='font-size: 16px;'>Xin chào,</p>");
+        html.append("<p>Chúng tôi nhận được yêu cầu đặt lại mật khẩu cho tài khoản của bạn.</p>");
+        html.append("<p>Nhấn vào nút bên dưới để đặt lại mật khẩu:</p>");
+        
+        // Reset Button
+        html.append("<div style='text-align: center; margin: 30px 0;'>");
+        html.append("<a href='").append(resetLink).append("' ");
+        html.append("style='display: inline-block; background: linear-gradient(135deg, #c9a962 0%, #b8943a 100%); ");
+        html.append("color: white; padding: 15px 40px; text-decoration: none; border-radius: 30px; ");
+        html.append("font-weight: 600; font-size: 16px; box-shadow: 0 4px 15px rgba(201, 169, 98, 0.4);'>");
+        html.append("Đặt Lại Mật Khẩu</a>");
+        html.append("</div>");
+        
+        // Warning Box
+        html.append("<div style='background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 15px; margin: 20px 0;'>");
+        html.append("<p style='margin: 0; color: #856404; font-size: 14px;'>");
+        html.append("<strong>⚠️ Lưu ý:</strong> Link này sẽ hết hạn sau <strong>1 giờ</strong>. ");
+        html.append("Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này.");
+        html.append("</p>");
+        html.append("</div>");
+        
+        html.append("<p style='color: #666; font-size: 14px;'>Nếu nút không hoạt động, bạn có thể copy và dán link sau vào trình duyệt:</p>");
+        html.append("<p style='background: #e9ecef; padding: 10px; border-radius: 5px; word-break: break-all; font-size: 12px; color: #495057;'>");
+        html.append(resetLink);
+        html.append("</p>");
+        
+        html.append("</div>");
+        
+        // Footer
+        html.append("<div style='text-align: center; color: #888; font-size: 12px; margin-top: 20px;'>");
+        html.append("<p>© 2026 Clothing Shop. All rights reserved.</p>");
+        html.append("<p>Email này được gửi tự động, vui lòng không trả lời.</p>");
+        html.append("</div>");
+        
+        html.append("</div>");
+        html.append("</body></html>");
+        
+        return html.toString();
+    }
 }

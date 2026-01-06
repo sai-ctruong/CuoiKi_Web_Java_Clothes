@@ -131,8 +131,8 @@
                                         <div class="form-check">
                                             <input type="checkbox" class="form-check-input" id="terms" name="terms" required>
                                             <label class="form-check-label" for="terms">
-                                                Tôi đồng ý với <a href="#" class="link-gold">điều khoản sử dụng</a> và 
-                                                <a href="#" class="link-gold">chính sách bảo mật</a>
+                                                Tôi đồng ý với <a href="${pageContext.request.contextPath}/terms.jsp" class="link-gold" target="_blank">điều khoản sử dụng</a> và 
+                                                <a href="${pageContext.request.contextPath}/privacy.jsp" class="link-gold" target="_blank">chính sách bảo mật</a>
                                             </label>
                                         </div>
                                     </div>
@@ -218,7 +218,6 @@
         /* Register Page Styles */
         .register-page {
             min-height: 100vh;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -231,9 +230,20 @@
             position: absolute;
             inset: 0;
             background: 
-                radial-gradient(circle at 20% 50%, rgba(201, 169, 98, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(201, 169, 98, 0.15) 0%, transparent 50%);
+                linear-gradient(135deg, rgba(26, 26, 26, 0.85) 0%, rgba(26, 26, 26, 0.75) 100%),
+                url('https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=1920') center/cover no-repeat;
+            filter: blur(2px);
+            transform: scale(1.02);
             pointer-events: none;
+        }
+        
+        .auth-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(201, 169, 98, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(201, 169, 98, 0.2) 0%, transparent 50%);
         }
         
         .back-home-btn {
