@@ -63,7 +63,6 @@
             localStorage.setItem(STORAGE_KEY, sessionId);
         }
         
-        console.log('Chat widget initialized');
     }
     
     /**

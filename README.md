@@ -26,11 +26,14 @@
 **Clothing Shop** là website thương mại điện tử chuyên bán quần áo thời trang với các tính năng:
 
 - Hiển thị và tìm kiếm sản phẩm theo danh mục, thương hiệu
+- Sắp xếp sản phẩm theo giá, tên, mới nhất
 - Giỏ hàng và thanh toán trực tuyến
 - Hệ thống mã giảm giá (voucher)
 - Quản lý tài khoản và địa chỉ giao hàng
 - Danh sách yêu thích (wishlist)
 - Đánh giá sản phẩm
+- **Live Chat hỗ trợ khách hàng (Chatbot FAQ)**
+- **Chế độ Dark/Light Mode**
 - Trang quản trị Admin với dashboard đầy đủ
 
 ---
@@ -50,9 +53,10 @@
 | Công nghệ | Phiên bản | Mô tả |
 |-----------|-----------|-------|
 | JSP/JSTL | 3.0 | Server-side rendering |
-| Bootstrap | 5.3.2 | CSS Framework |
-| Bootstrap Icons | 1.11.1 | Icon library |
+| Bootstrap | 5.3.3 | CSS Framework |
+| Bootstrap Icons | 1.11.3 | Icon library |
 | JavaScript | ES6+ | Client-side scripting |
+| Google Fonts | Inter, Playfair Display | Typography |
 
 ### Server & Build
 | Công nghệ | Phiên bản | Mô tả |
@@ -67,7 +71,7 @@
 ```
 src/main/
 ├── java/mypackage/shop/
-│   ├── controller/          # 30 Servlets
+│   ├── controller/          # 35+ Servlets
 │   │   ├── HomeServlet.java
 │   │   ├── ProductListServlet.java
 │   │   ├── ProductDetailServlet.java
@@ -76,30 +80,36 @@ src/main/
 │   │   ├── AddToCartServlet.java
 │   │   ├── ViewCartServlet.java
 │   │   ├── CheckoutServlet.java
+│   │   ├── ChatServlet.java          # NEW: Live Chat API
 │   │   ├── DashboardServlet.java
 │   │   ├── ManageProductServlet.java
-│   │   └── ... (20 servlets khác)
-│   ├── dao/                  # 12 Data Access Objects
+│   │   └── ... (25+ servlets khác)
+│   ├── dao/                  # 14 Data Access Objects
 │   │   ├── ProductDAO.java
 │   │   ├── UserDAO.java
 │   │   ├── CartDAO.java
 │   │   ├── OrderDAO.java
-│   │   └── ... (8 DAOs khác)
-│   ├── model/                # 17 Entity Classes
+│   │   ├── ChatDAO.java              # NEW: Chat message storage
+│   │   └── ... (9 DAOs khác)
+│   ├── model/                # 19 Entity Classes
 │   │   ├── User.java
 │   │   ├── Product.java
 │   │   ├── Category.java
 │   │   ├── Brand.java
 │   │   ├── Cart.java
 │   │   ├── Order.java
+│   │   ├── ChatMessage.java          # NEW
+│   │   ├── ChatSession.java          # NEW
 │   │   └── ... (11 models khác)
-│   ├── filter/               # Security Filters
-│   │   └── SecurityFilter.java
+│   ├── filter/               # Security & Performance Filters
+│   │   ├── SecurityFilter.java
+│   │   └── CacheControlFilter.java   # NEW: Static file caching
 │   └── utils/                # Utility Classes
 │       ├── HibernateUtil.java
 │       ├── EmailUtils.java
 │       ├── PasswordUtils.java
-│       └── UploadUtils.java
+│       ├── UploadUtils.java
+│       └── ChatbotService.java       # NEW: FAQ chatbot logic
 └── webapp/
     ├── index.jsp             # Trang chủ
     ├── products.jsp          # Danh sách sản phẩm
@@ -111,6 +121,13 @@ src/main/
     ├── profile.jsp           # Tài khoản
     ├── wishlist.jsp          # Yêu thích
     ├── order-history.jsp     # Lịch sử đơn hàng
+    ├── search.jsp            # Tìm kiếm
+    ├── about.jsp             # Giới thiệu
+    ├── contact.jsp           # Liên hệ
+    ├── includes/
+    │   ├── header.jsp
+    │   ├── footer.jsp
+    │   └── chat-widget.jsp   # NEW: Live chat widget
     ├── admin/                # Trang quản trị
     │   ├── dashboard.jsp
     │   ├── products.jsp
@@ -120,7 +137,20 @@ src/main/
     │   └── users.jsp
     └── assets/
         ├── css/
+        │   ├── main.css
+        │   ├── header.css
+        │   ├── theme.css         # NEW: Dark/Light theme
+        │   ├── chat.css          # NEW: Chat widget styles
+        │   ├── toast.css         # NEW: Toast notifications
+        │   └── gallery.css       # NEW: Product gallery
         └── js/
+            ├── main.js
+            ├── cart.js
+            ├── theme.js          # NEW: Theme switcher
+            ├── chat.js           # NEW: Chat functionality
+            ├── toast.js          # NEW: Toast notifications
+            ├── gallery.js        # NEW: Image gallery
+            └── lazy-load.js      # NEW: Image lazy loading
 ```
 
 ---
@@ -132,17 +162,23 @@ src/main/
 | STT | Tính năng | Mô tả | Trạng thái |
 |-----|-----------|-------|------------|
 | 1 | Xem sản phẩm | Duyệt và lọc sản phẩm theo danh mục, thương hiệu, giá | ✅ Hoàn thành |
-| 2 | Tìm kiếm | Tìm sản phẩm theo tên, mô tả | ✅ Hoàn thành |
-| 3 | Chi tiết sản phẩm | Xem thông tin chi tiết, chọn size, màu | ✅ Hoàn thành |
-| 4 | Đăng ký/Đăng nhập | Tạo tài khoản và xác thực | ✅ Hoàn thành |
-| 5 | Giỏ hàng | Thêm, xóa, cập nhật số lượng | ✅ Hoàn thành |
-| 6 | Wishlist | Lưu sản phẩm yêu thích | ✅ Hoàn thành |
-| 7 | Mã giảm giá | Áp dụng voucher khi thanh toán | ✅ Hoàn thành |
-| 8 | Thanh toán | Đặt hàng với nhiều phương thức | ✅ Hoàn thành |
-| 9 | Quản lý địa chỉ | Thêm/sửa/xóa địa chỉ giao hàng | ✅ Hoàn thành |
-| 10 | Lịch sử đơn hàng | Xem trạng thái đơn hàng | ✅ Hoàn thành |
-| 11 | Đánh giá sản phẩm | Viết review và rating | ✅ Hoàn thành |
-| 12 | Quên mật khẩu | Reset password qua email | ✅ Hoàn thành |
+| 2 | Sắp xếp sản phẩm | Sắp xếp theo giá, tên A-Z/Z-A, mới nhất | ✅ Hoàn thành |
+| 3 | Tìm kiếm | Tìm sản phẩm theo tên, mô tả | ✅ Hoàn thành |
+| 4 | Chi tiết sản phẩm | Xem thông tin chi tiết, chọn size, màu | ✅ Hoàn thành |
+| 5 | **Gallery ảnh nâng cao** | Lightbox, zoom, navigation arrows | ✅ Hoàn thành |
+| 6 | Đăng ký/Đăng nhập | Tạo tài khoản và xác thực | ✅ Hoàn thành |
+| 7 | Giỏ hàng | Thêm, xóa, cập nhật số lượng + animation | ✅ Hoàn thành |
+| 8 | **Toast Notifications** | Thông báo đẹp khi thêm giỏ hàng/wishlist | ✅ Hoàn thành |
+| 9 | Wishlist | Lưu sản phẩm yêu thích | ✅ Hoàn thành |
+| 10 | Mã giảm giá | Áp dụng voucher khi thanh toán | ✅ Hoàn thành |
+| 11 | Ví Voucher | Xem voucher cá nhân | ✅ Hoàn thành |
+| 12 | Thanh toán | Đặt hàng với nhiều phương thức | ✅ Hoàn thành |
+| 13 | Quản lý địa chỉ | Thêm/sửa/xóa địa chỉ giao hàng | ✅ Hoàn thành |
+| 14 | Lịch sử đơn hàng | Xem trạng thái đơn hàng | ✅ Hoàn thành |
+| 15 | Đánh giá sản phẩm | Viết review và rating | ✅ Hoàn thành |
+| 16 | Quên mật khẩu | Reset password qua email | ✅ Hoàn thành |
+| 17 | **Live Chat (Chatbot)** | Hỏi đáp FAQ tự động | ✅ Hoàn thành |
+| 18 | **Dark/Light Mode** | Chuyển đổi giao diện sáng/tối | ✅ Hoàn thành |
 
 ### 🔧 Quản Trị (Admin)
 
@@ -161,6 +197,14 @@ src/main/
 |-----|-----------|-------|------------|
 | 1 | Dashboard | Xem thống kê | ✅ Hoàn thành |
 | 2 | Quản lý đơn hàng | Xem và xử lý đơn | ✅ Hoàn thành |
+
+### ⚡ Hiệu Năng & UX
+
+| STT | Tính năng | Mô tả | Trạng thái |
+|-----|-----------|-------|------------|
+| 1 | **Lazy Loading Images** | Chỉ tải ảnh khi scroll đến | ✅ Hoàn thành |
+| 2 | **Cache Control** | Browser cache cho static files | ✅ Hoàn thành |
+| 3 | **Fly-to-Cart Animation** | Animation khi thêm giỏ hàng | ✅ Hoàn thành |
 
 ---
 
@@ -186,6 +230,7 @@ src/main/
 │  CUSTOMER (Khách hàng)                                      │
 │  ├── Xem sản phẩm                                          │
 │  ├── Giỏ hàng + Thanh toán                                 │
+│  ├── Live Chat hỗ trợ                                      │
 │  ├── Quản lý tài khoản                                      │
 │  └── Xem lịch sử đơn hàng                                  │
 │                                                             │
@@ -206,29 +251,39 @@ src/main/
 
 1. **Clone repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/sai-ctruong/CuoiKi_Web_Java_Clothes.git
    cd CuoiKi_Web_Java_Clothes
    ```
 
 2. **Cấu hình Database**
-   - Tạo database MySQL
-   - Cập nhật thông tin kết nối trong `persistence.xml`
-
-3. **Chạy script SQL mẫu**
-   ```bash
-   mysql -u username -p database_name < database/sample_products.sql
+   - Tạo database MySQL: `clothing_shop`
+   - Cập nhật thông tin kết nối trong `src/main/resources/META-INF/persistence.xml`
+   ```xml
+   <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/clothing_shop"/>
+   <property name="jakarta.persistence.jdbc.user" value="your_username"/>
+   <property name="jakarta.persistence.jdbc.password" value="your_password"/>
    ```
 
-4. **Build và Deploy**
+3. **Build dự án**
    ```bash
    mvn clean package
-   # Copy file WAR vào Tomcat webapps/
    ```
+
+4. **Deploy lên Tomcat**
+   - Copy file `target/ProjectCuoiKi_Clothes.war` vào thư mục `<TOMCAT_HOME>/webapps/`
+   - Hoặc sử dụng IDE (NetBeans, IntelliJ) để deploy
 
 5. **Truy cập ứng dụng**
    ```
    http://localhost:8080/ProjectCuoiKi_Clothes/
    ```
+
+### Tài Khoản Test
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@example.com | admin123 |
+| Staff | staff@example.com | staff123 |
+| Customer | user@example.com | user123 |
 
 ---
 
@@ -247,28 +302,33 @@ User ─────┬──── Cart ────── CartItem ───�
           │                                  │
           ├──── Review ─────────────────────┘
           │                                  │
-          └──── Wishlist ───────────────────┴── Brand
-                                             │
-Voucher ─────────────────────────────────────┘
+          ├──── Wishlist ───────────────────┴── Brand
+          │                                  │
+          ├──── UserVoucher ─────────────────── Voucher
+          │
+          └──── ChatSession ──── ChatMessage
 ```
 
 ### Các Bảng Chính
 
-| Bảng | Mô tả | Số cột |
-|------|-------|--------|
-| User | Thông tin người dùng | 10 |
-| Product | Sản phẩm | 12 |
-| ProductImage | Ảnh sản phẩm | 4 |
-| Category | Danh mục | 3 |
-| Brand | Thương hiệu | 3 |
-| Cart | Giỏ hàng | 4 |
-| CartItem | Chi tiết giỏ hàng | 5 |
-| Order | Đơn hàng | 12 |
-| OrderDetail | Chi tiết đơn hàng | 5 |
-| Address | Địa chỉ giao hàng | 8 |
-| Review | Đánh giá | 6 |
-| Wishlist | Yêu thích | 4 |
-| Voucher | Mã giảm giá | 9 |
+| Bảng | Mô tả | Ghi chú |
+|------|-------|---------|
+| User | Thông tin người dùng | |
+| Product | Sản phẩm | |
+| ProductImage | Ảnh sản phẩm | |
+| Category | Danh mục | |
+| Brand | Thương hiệu | |
+| Cart | Giỏ hàng | |
+| CartItem | Chi tiết giỏ hàng | |
+| Order | Đơn hàng | |
+| OrderDetail | Chi tiết đơn hàng | |
+| Address | Địa chỉ giao hàng | |
+| Review | Đánh giá | |
+| Wishlist | Yêu thích | |
+| Voucher | Mã giảm giá | |
+| UserVoucher | Voucher cá nhân | |
+| ChatSession | Phiên chat | **NEW** |
+| ChatMessage | Tin nhắn chat | **NEW** |
 
 ---
 
@@ -279,8 +339,9 @@ Voucher ────────────────────────
 |--------|-----|-------|
 | GET | `/home` | Trang chủ |
 | GET | `/products` | Danh sách sản phẩm |
+| GET | `/products?sort=newest` | Sắp xếp sản phẩm |
 | GET | `/product?id={id}` | Chi tiết sản phẩm |
-| GET | `/search?keyword={keyword}` | Tìm kiếm |
+| GET | `/search?q={keyword}` | Tìm kiếm |
 | GET | `/about` | Giới thiệu |
 | GET | `/contact` | Liên hệ |
 
@@ -291,12 +352,13 @@ Voucher ────────────────────────
 | GET/POST | `/register` | Đăng ký |
 | GET | `/logout` | Đăng xuất |
 | GET/POST | `/forgot-password` | Quên mật khẩu |
+| GET/POST | `/reset-password` | Đặt lại mật khẩu |
 
 ### Protected URLs (Yêu cầu đăng nhập)
 | Method | URL | Mô tả |
 |--------|-----|-------|
 | GET | `/cart` | Xem giỏ hàng |
-| POST | `/cart/add` | Thêm vào giỏ |
+| GET | `/cart/add?id={id}` | Thêm vào giỏ |
 | POST | `/cart/update` | Cập nhật giỏ |
 | POST | `/cart/remove` | Xóa khỏi giỏ |
 | GET/POST | `/checkout` | Thanh toán |
@@ -304,6 +366,12 @@ Voucher ────────────────────────
 | GET | `/orders` | Lịch sử đơn hàng |
 | GET | `/wishlist` | Yêu thích |
 | GET/POST | `/address` | Địa chỉ |
+| GET | `/voucher-wallet` | Ví voucher |
+
+### Chat API
+| Method | URL | Mô tả |
+|--------|-----|-------|
+| POST | `/chat` | Gửi tin nhắn chat |
 
 ### Admin URLs (Chỉ ADMIN)
 | Method | URL | Mô tả |
@@ -325,9 +393,9 @@ Voucher ────────────────────────
 
 ### Trang Khách Hàng
 - **Trang chủ**: Hero banner, sản phẩm nổi bật, danh mục
-- **Sản phẩm**: Grid layout, filter, pagination
-- **Chi tiết**: Gallery ảnh, chọn size/màu, review
-- **Giỏ hàng**: Cập nhật số lượng, voucher
+- **Sản phẩm**: Grid layout, filter, sort dropdown, pagination
+- **Chi tiết**: Gallery ảnh với lightbox, chọn size/màu, review
+- **Giỏ hàng**: Cập nhật số lượng, voucher, fly-to-cart animation
 - **Thanh toán**: Form địa chỉ, chọn payment
 
 ### Trang Admin
@@ -337,10 +405,16 @@ Voucher ────────────────────────
 - **Users**: Quản lý role, toggle status
 
 ### Design System
-- **Theme**: Dark mode với gradient background
-- **Colors**: Primary blue (#3b82f6), Gold accent (#c9a050)
-- **Font**: Inter (Google Fonts)
-- **Effects**: Glassmorphism, hover animations
+- **Theme**: Dark/Light mode toggle
+- **Colors**: Primary blue (#3b82f6), Gold accent (#c9a962)
+- **Font**: Inter, Playfair Display (Google Fonts)
+- **Effects**: Glassmorphism, hover animations, toast notifications
+
+### UI Components (NEW)
+- **Toast Notifications**: 5 loại (success, error, warning, info, cart)
+- **Live Chat Widget**: Floating button với chatbot
+- **Image Gallery**: Lightbox, zoom, keyboard navigation
+- **Theme Toggle**: Nút chuyển đổi sáng/tối trên header
 
 ---
 
@@ -351,22 +425,26 @@ Voucher ────────────────────────
 - [x] Hệ thống xác thực và phân quyền
 - [x] CRUD sản phẩm, danh mục, thương hiệu
 - [x] Giỏ hàng và thanh toán
-- [x] Mã giảm giá (voucher)
+- [x] Mã giảm giá (voucher) + Ví voucher cá nhân
 - [x] Quản lý đơn hàng
 - [x] Dashboard admin
 - [x] Upload ảnh sản phẩm
 - [x] Wishlist và Review
 - [x] Email notifications
+- [x] Sắp xếp sản phẩm (giá, tên, mới nhất)
+- [x] **Live Chat Chatbot** (08/01/2026)
+- [x] **Dark/Light Mode** (08/01/2026)
+- [x] **Toast Notifications** (08/01/2026)
+- [x] **Product Gallery nâng cao** (08/01/2026)
+- [x] **Performance: Lazy Loading + Caching** (08/01/2026)
 
-### 🔄 Đang Phát Triển
+### 🔄 Có Thể Mở Rộng
 - [ ] Tích hợp thanh toán online (VNPay/Momo)
 - [ ] Báo cáo doanh thu chi tiết
 - [ ] Export Excel đơn hàng
-
-### 📋 Kế Hoạch
-- [ ] Chat support
+- [ ] Real-time chat với WebSocket
 - [ ] Push notifications
-- [ ] Mobile responsive improvements
+- [ ] Social Login (Google, Facebook)
 
 ---
 
@@ -387,4 +465,4 @@ Dự án được phát triển cho mục đích học tập.
 
 ---
 
-> **Cập nhật lần cuối**: 28/12/2024
+> **Cập nhật lần cuối**: 08/01/2026

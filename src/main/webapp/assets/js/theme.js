@@ -89,7 +89,6 @@
             });
         }
         
-        console.log('Theme system initialized:', theme);
     }
     
     // Apply theme immediately to prevent flash

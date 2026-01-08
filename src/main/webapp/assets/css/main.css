@@ -1486,6 +1486,13 @@ a:hover { color: var(--gold); }
     transform: translateY(0);
 }
 
+/* Bootstrap click dropdown support */
+.dropdown-menu.show {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0) !important;
+}
+
 .dropdown-content {
     display: flex;
     gap: 2rem;

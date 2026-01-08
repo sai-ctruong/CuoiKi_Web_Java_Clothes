@@ -148,10 +148,8 @@
                 // Sync with actual server count (usually same as optimistic)
                 updateCartBadge(data.totalItems);
                 
-                // Show success toast
-                setTimeout(() => {
-                    showToast('success', data.message || 'Đã thêm vào giỏ hàng!');
-                }, 800); // Delay toast slightly to match animation end
+                // Show success toast immediately
+                showToast('success', data.message || 'Đã thêm vào giỏ hàng!');
                 
             } else if (data.requireLogin) {
                 // Revert optimistic update
@@ -268,27 +266,23 @@
     }
 
     /**
-     * Show toast notification
+     * Show toast notification using Toast API
      */
     function showToast(type, message) {
-        const container = document.getElementById('toast-container');
-        if (!container) return;
+        // Use new Toast API if available
+        if (window.Toast) {
+            if (type === 'success') {
+                window.Toast.cart('Thành công!', message);
+            } else if (type === 'error') {
+                window.Toast.error('Lỗi', message);
+            } else {
+                window.Toast.info('Thông báo', message);
+            }
+            return;
+        }
         
-        const toast = document.createElement('div');
-        toast.className = 'toast-notification toast-' + type;
-        
-        const bgColor = type === 'success' ? '#28a745' : type === 'error' ? '#dc3545' : '#17a2b8';
-        const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle';
-        
-        toast.style.cssText = 'background:' + bgColor + ';color:white;padding:12px 20px;border-radius:8px;box-shadow:0 4px 15px rgba(0,0,0,0.2);display:flex;align-items:center;gap:10px;font-size:0.95rem;animation:slideIn 0.3s ease;max-width:350px;';
-        toast.innerHTML = '<i class="bi bi-' + icon + '"></i><span>' + message + '</span>';
-        
-        container.appendChild(toast);
-        
-        setTimeout(function() {
-            toast.style.animation = 'slideOut 0.3s ease';
-            setTimeout(function() { toast.remove(); }, 300);
-        }, 2000);  // Giảm từ 3000ms xuống 2000ms
+        // Fallback to simple alert if Toast not loaded
+        alert(message);
     }
 
     /**

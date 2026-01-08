@@ -800,13 +800,27 @@
                     <!-- Sort Dropdown -->
                     <div class="dropdown">
                         <button class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
-                            <i class="bi bi-sort-down me-1"></i>Sắp xếp
+                            <i class="bi bi-sort-down me-1"></i>
+                            <c:choose>
+                                <c:when test="${currentSort == 'newest'}">Mới nhất</c:when>
+                                <c:when test="${currentSort == 'price-asc'}">Giá thấp → cao</c:when>
+                                <c:when test="${currentSort == 'price-desc'}">Giá cao → thấp</c:when>
+                                <c:when test="${currentSort == 'name'}">Tên A → Z</c:when>
+                                <c:when test="${currentSort == 'name-desc'}">Tên Z → A</c:when>
+                                <c:otherwise>Sắp xếp</c:otherwise>
+                            </c:choose>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item ${empty currentSort ? 'active' : ''}" 
+                                   href="?${not empty currentCategory ? 'id='.concat(currentCategory.id) : ''}${not empty currentMinPrice ? '&minPrice='.concat(currentMinPrice) : ''}${not empty currentMaxPrice ? '&maxPrice='.concat(currentMaxPrice) : ''}">
+                                <i class="bi bi-list me-2"></i>Mặc định
+                            </a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item ${currentSort == 'newest' ? 'active' : ''}" 
                                    href="?sort=newest${not empty currentCategory ? '&id='.concat(currentCategory.id) : ''}${not empty currentMinPrice ? '&minPrice='.concat(currentMinPrice) : ''}${not empty currentMaxPrice ? '&maxPrice='.concat(currentMaxPrice) : ''}">
                                 <i class="bi bi-clock me-2"></i>Mới nhất
                             </a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item ${currentSort == 'price-asc' ? 'active' : ''}" 
                                    href="?sort=price-asc${not empty currentCategory ? '&id='.concat(currentCategory.id) : ''}${not empty currentMinPrice ? '&minPrice='.concat(currentMinPrice) : ''}${not empty currentMaxPrice ? '&maxPrice='.concat(currentMaxPrice) : ''}">
                                 <i class="bi bi-sort-numeric-up me-2"></i>Giá thấp → cao
@@ -815,9 +829,14 @@
                                    href="?sort=price-desc${not empty currentCategory ? '&id='.concat(currentCategory.id) : ''}${not empty currentMinPrice ? '&minPrice='.concat(currentMinPrice) : ''}${not empty currentMaxPrice ? '&maxPrice='.concat(currentMaxPrice) : ''}">
                                 <i class="bi bi-sort-numeric-down me-2"></i>Giá cao → thấp
                             </a></li>
+                            <li><hr class="dropdown-divider"></li>
                             <li><a class="dropdown-item ${currentSort == 'name' ? 'active' : ''}" 
                                    href="?sort=name${not empty currentCategory ? '&id='.concat(currentCategory.id) : ''}${not empty currentMinPrice ? '&minPrice='.concat(currentMinPrice) : ''}${not empty currentMaxPrice ? '&maxPrice='.concat(currentMaxPrice) : ''}">
                                 <i class="bi bi-sort-alpha-down me-2"></i>Tên A → Z
+                            </a></li>
+                            <li><a class="dropdown-item ${currentSort == 'name-desc' ? 'active' : ''}" 
+                                   href="?sort=name-desc${not empty currentCategory ? '&id='.concat(currentCategory.id) : ''}${not empty currentMinPrice ? '&minPrice='.concat(currentMinPrice) : ''}${not empty currentMaxPrice ? '&maxPrice='.concat(currentMaxPrice) : ''}">
+                                <i class="bi bi-sort-alpha-up me-2"></i>Tên Z → A
                             </a></li>
                         </ul>
                     </div>
@@ -1079,5 +1098,12 @@
         `;
         document.head.appendChild(style);
     </script>
+    
+    <!-- Bootstrap JS Bundle (Required for dropdowns) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Toast Notifications -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/toast.css">
+    <script src="${pageContext.request.contextPath}/assets/js/toast.js"></script>
 </body>
 </html>

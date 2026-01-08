@@ -56,3 +56,10 @@
 
 <!-- Theme Toggle -->
 <script src="${pageContext.request.contextPath}/assets/js/theme.js"></script>
+
+<!-- Toast Notifications -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/toast.css">
+<script src="${pageContext.request.contextPath}/assets/js/toast.js"></script>
+
+<!-- Lazy Load Images -->
+<script src="${pageContext.request.contextPath}/assets/js/lazy-load.js"></script>

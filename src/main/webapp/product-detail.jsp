@@ -24,6 +24,7 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/theme.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/header.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/gallery.css">
     
     <style>
         :root {
@@ -1577,18 +1578,11 @@
         
         // Image zoom on hover
         document.addEventListener('DOMContentLoaded', function() {
-            const mainImage = document.getElementById('mainImage');
-            if (mainImage) {
-                mainImage.addEventListener('mouseenter', function() {
-                    this.style.cursor = 'zoom-in';
-                });
-                
-                mainImage.addEventListener('click', function() {
-                    // Simple image zoom modal could be added here
-                    showToast('Tính năng zoom ảnh sẽ được cập nhật!');
-                });
-            }
+            // Gallery functionality is handled by gallery.js
         });
     </script>
+    
+    <!-- Enhanced Gallery -->
+    <script src="${pageContext.request.contextPath}/assets/js/gallery.js"></script>
 </body>
 </html>
