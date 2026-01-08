@@ -7,10 +7,6 @@ import jakarta.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
 
-/**
- * User entity matching Users table in database
- * @author PC
- */
 @Entity
 @Table(name = "Users")
 public class User {

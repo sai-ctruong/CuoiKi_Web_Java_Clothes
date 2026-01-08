@@ -8,10 +8,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
-/**
- * Order entity matching Orders table in database
- * @author PC
- */
+
 @Entity
 @Table(name = "Orders")
 public class Order {

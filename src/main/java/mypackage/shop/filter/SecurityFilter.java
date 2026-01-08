@@ -20,7 +20,7 @@ import java.util.List;
  * - ADMIN: Toàn quyền truy cập mọi trang admin
  * - STAFF: Chỉ truy cập Dashboard và Quản lý đơn hàng
  * - USER: Chỉ truy cập trang public và trang cá nhân
- * @author PC
+ * @author
  */
 @WebFilter(filterName = "SecurityFilter", urlPatterns = {"/*"})
 public class SecurityFilter implements Filter {

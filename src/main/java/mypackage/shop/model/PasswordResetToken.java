@@ -8,10 +8,6 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- * PasswordResetToken entity for password recovery
- * @author PC
- */
 @Entity
 @Table(name = "password_reset_tokens")
 public class PasswordResetToken {

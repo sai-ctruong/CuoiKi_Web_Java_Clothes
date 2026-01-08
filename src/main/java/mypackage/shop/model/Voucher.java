@@ -7,10 +7,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 
-/**
- * Voucher entity matching Voucher table in database
- * @author PC
- */
+
 @Entity
 @Table(name = "Voucher")
 public class Voucher {

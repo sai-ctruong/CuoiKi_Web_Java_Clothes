@@ -6,10 +6,7 @@ package mypackage.shop.model;
 import jakarta.persistence.*;
 import java.util.Date;
 
-/**
- * Wishlist entity for storing user's favorite products
- * @author PC
- */
+
 @Entity
 @Table(name = "Wishlist", uniqueConstraints = {
     @UniqueConstraint(columnNames = {"user_id", "product_id"})

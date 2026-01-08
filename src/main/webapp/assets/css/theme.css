@@ -1,0 +1,174 @@
+/* ==============================================
+   DARK/LIGHT MODE TOGGLE
+   ============================================== */
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+    /* Backgrounds */
+    --bg-white: #1a1a2e;
+    --bg-light: #232342;
+    --bg-section: #16162b;
+    --bg-secondary: #1e1e36;
+    --bg-card: #232342;
+    
+    /* Text */
+    --text-dark: #ffffff;
+    --text-body: #e0e0e0;
+    --text-muted: #a0a0a0;
+    --text-light: #888888;
+    --text-primary: #ffffff;
+    --text-secondary: #cccccc;
+    
+    /* Effects */
+    --shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.4);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* Dark Theme Specific Overrides */
+[data-theme="dark"] body {
+    background: var(--bg-white);
+}
+
+[data-theme="dark"] .main-header {
+    background: rgba(26, 26, 46, 0.98);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .product-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .product-info {
+    background: var(--bg-card);
+}
+
+[data-theme="dark"] .feature-card {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .form-control {
+    background: var(--bg-card);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: var(--text-body);
+}
+
+[data-theme="dark"] .form-control::placeholder {
+    color: var(--text-muted);
+}
+
+[data-theme="dark"] .btn-outline-gold {
+    color: var(--gold-light);
+    border-color: var(--gold);
+}
+
+[data-theme="dark"] .action-btn {
+    background: var(--bg-card);
+    color: var(--text-body);
+}
+
+[data-theme="dark"] .search-input {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+[data-theme="dark"] .search-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme="dark"] .user-dropdown-menu {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .user-dropdown-item {
+    color: var(--text-body);
+}
+
+[data-theme="dark"] .user-dropdown-item:hover {
+    background: rgba(201, 169, 98, 0.2);
+}
+
+[data-theme="dark"] .auth-card {
+    background: var(--bg-card);
+}
+
+[data-theme="dark"] .auth-body {
+    background: var(--bg-card);
+}
+
+[data-theme="dark"] .auth-footer {
+    background: var(--bg-light);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .empty-cart,
+[data-theme="dark"] .cart-item-card,
+[data-theme="dark"] .order-summary {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: var(--bg-light);
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+}
+
+.theme-toggle:hover {
+    background: var(--gold);
+    color: white;
+    transform: rotate(180deg);
+}
+
+/* Light theme icon */
+.theme-toggle .bi-sun-fill {
+    display: none;
+}
+
+.theme-toggle .bi-moon-fill {
+    display: inline-block;
+}
+
+/* Dark theme - swap icons */
+[data-theme="dark"] .theme-toggle .bi-sun-fill {
+    display: inline-block;
+}
+
+[data-theme="dark"] .theme-toggle .bi-moon-fill {
+    display: none;
+}
+
+/* Smooth transition for theme switch */
+body,
+.main-header,
+.product-card,
+.product-info,
+.feature-card,
+.form-control,
+.search-input,
+.user-dropdown-menu,
+.auth-card,
+.auth-body,
+.auth-footer,
+.empty-cart {
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}

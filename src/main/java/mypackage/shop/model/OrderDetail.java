@@ -6,10 +6,7 @@ package mypackage.shop.model;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
-/**
- * OrderDetail entity matching OrderDetail table in database
- * @author PC
- */
+
 @Entity
 @Table(name = "OrderDetail")
 public class OrderDetail {

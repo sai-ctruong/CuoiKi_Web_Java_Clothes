@@ -6,11 +6,7 @@ package mypackage.shop.model;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 
-/**
- * UserVoucher entity matching UserVoucher table in database
- * Liên kết voucher với user cụ thể
- * @author PC
- */
+
 @Entity
 @Table(name = "UserVoucher")
 public class UserVoucher {

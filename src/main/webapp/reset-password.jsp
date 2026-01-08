@@ -20,6 +20,7 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/theme.css">
     
     <style>
         .reset-page {

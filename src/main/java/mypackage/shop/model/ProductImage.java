@@ -5,10 +5,7 @@ package mypackage.shop.model;
 
 import jakarta.persistence.*;
 
-/**
- * ProductImage entity matching ProductImage table in database
- * @author PC
- */
+
 @Entity
 @Table(name = "ProductImage")
 public class ProductImage {

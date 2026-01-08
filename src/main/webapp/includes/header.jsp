@@ -50,6 +50,12 @@
                     </form>
                 </div>
                 
+                <!-- Theme Toggle -->
+                <button id="themeToggle" class="theme-toggle" title="Chuyển đổi giao diện">
+                    <i class="bi bi-moon-fill"></i>
+                    <i class="bi bi-sun-fill"></i>
+                </button>
+                
                 <!-- Cart -->
                 <a href="${pageContext.request.contextPath}/cart" class="action-btn" title="Giỏ hàng">
                     <i class="bi bi-bag"></i>

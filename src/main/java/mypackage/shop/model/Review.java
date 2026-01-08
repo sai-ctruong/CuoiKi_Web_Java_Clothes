@@ -6,10 +6,7 @@ package mypackage.shop.model;
 import jakarta.persistence.*;
 import java.sql.Timestamp;
 
-/**
- * Review entity matching Review table in database
- * @author PC
- */
+
 @Entity
 @Table(name = "Review")
 public class Review {

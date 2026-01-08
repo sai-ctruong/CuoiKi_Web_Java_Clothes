@@ -6,10 +6,7 @@ package mypackage.shop.model;
 import jakarta.persistence.*;
 import java.util.List;
 
-/**
- * Brand entity matching Brand table in database
- * @author PC
- */
+
 @Entity
 @Table(name = "Brand")
 public class Brand {

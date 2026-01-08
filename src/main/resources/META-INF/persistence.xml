@@ -21,6 +21,8 @@
         <class>mypackage.shop.model.Wishlist</class>
         <class>mypackage.shop.model.UserVoucher</class>
         <class>mypackage.shop.model.PasswordResetToken</class>
+        <class>mypackage.shop.model.ChatSession</class>
+        <class>mypackage.shop.model.ChatMessage</class>
         
         <properties>
             <!-- Database connection -->

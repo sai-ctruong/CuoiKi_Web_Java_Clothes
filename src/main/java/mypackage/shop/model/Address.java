@@ -5,10 +5,6 @@ package mypackage.shop.model;
 
 import jakarta.persistence.*;
 
-/**
- * Address entity matching Address table in database
- * @author PC
- */
 @Entity
 @Table(name = "Address")
 public class Address {

@@ -18,6 +18,7 @@
     
     <!-- Custom CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/main.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/theme.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/header.css">
 </head>
 <body>

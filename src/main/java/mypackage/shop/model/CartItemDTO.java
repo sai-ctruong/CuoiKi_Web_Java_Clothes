@@ -6,10 +6,7 @@ package mypackage.shop.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-/**
- * Data Transfer Object for cart items - used for JSP display
- * Maps SessionCartItem to the format expected by cart.jsp
- */
+
 public class CartItemDTO implements Serializable {
     private int id;  // product ID
     private String productName;

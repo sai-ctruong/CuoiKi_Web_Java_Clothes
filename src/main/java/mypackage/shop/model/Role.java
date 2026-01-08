@@ -3,10 +3,7 @@
  */
 package mypackage.shop.model;
 
-/**
- * Role constants matching ENUM in database
- * @author PC
- */
+
 public class Role {
     public static final String ADMIN = "ADMIN";
     public static final String STAFF = "STAFF";

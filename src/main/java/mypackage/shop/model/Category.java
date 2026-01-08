@@ -6,10 +6,6 @@ package mypackage.shop.model;
 import jakarta.persistence.*;
 import java.util.List;
 
-/**
- * Category entity matching Category table in database
- * @author PC
- */
 @Entity
 @Table(name = "Category")
 public class Category {

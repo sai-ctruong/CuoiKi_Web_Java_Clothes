@@ -8,10 +8,6 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
-/**
- * Product entity matching Product table in database
- * @author PC
- */
 @Entity
 @Table(name = "Product")
 public class Product {
@@ -231,7 +227,7 @@ public class Product {
             url = thumbnailUrl;
         }
         
-        // Normalize URL: remove context path prefix if present (e.g., /ProjectCuoiKi_Clothes)
+        
         if (url != null && !url.startsWith("/uploads") && url.contains("/uploads")) {
             int uploadIndex = url.indexOf("/uploads");
             url = url.substring(uploadIndex);
