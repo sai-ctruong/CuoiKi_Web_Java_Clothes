@@ -1,6 +1,6 @@
-/*
- * (Xem giỏ hàng)
- */
+
+//Author: Hoai
+
 package mypackage.shop.controller;
 
 import jakarta.servlet.ServletException;
@@ -10,10 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/**
- *
- * @author PC
- */
 @WebServlet(name = "ViewCartServlet", urlPatterns = {"/cart"})
 public class ViewCartServlet extends HttpServlet {
 
@@ -30,10 +26,7 @@ public class ViewCartServlet extends HttpServlet {
     }
 
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        
-        // Forward to cart.jsp
-        // The cart object in session will be accessed directly in the JSP
+            throws ServletException, IOException {      
         request.getRequestDispatcher("/cart.jsp").forward(request, response);
     }
 }

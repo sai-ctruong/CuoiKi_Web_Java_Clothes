@@ -1,7 +1,3 @@
-/*
- * (Lớp bao gồm list các CartItem và tổng tiền)
- * Session-based cart for shopping
- */
 
 //Author: Hoai
 
@@ -39,14 +35,11 @@ public class Cart implements Serializable {
         Integer productId = item.getProduct().getId();
         Integer quantity = item.getQuantity() != null ? item.getQuantity() : 1;
         
-        // Check if product already exists in cart
         SessionCartItem existingItem = findItemByProductId(productId);
         
         if (existingItem != null) {
-            // Update quantity if product already exists
             existingItem.setQuantity(existingItem.getQuantity() + quantity);
         } else {
-            // Add new item if product doesn't exist
             items.add(item);
         }
     }
@@ -108,14 +101,12 @@ public class Cart implements Serializable {
 
         BigDecimal total = getTotalPrice();
         
-        // Calculate discount based on percent
         if (voucher.getDiscountPercent() != null && voucher.getDiscountPercent() > 0) {
             BigDecimal discount = total.multiply(BigDecimal.valueOf(voucher.getDiscountPercent()))
                                        .divide(BigDecimal.valueOf(100));
             return discount;
         }
         
-        // Calculate discount based on fixed amount
         if (voucher.getDiscountAmount() != null) {
             return voucher.getDiscountAmount();
         }

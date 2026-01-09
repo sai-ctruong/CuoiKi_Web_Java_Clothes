@@ -1,6 +1,3 @@
-/*
- * (Xóa sản phẩm khỏi giỏ)
- */
 
 //Author: Hoai
 
@@ -31,14 +28,13 @@ public class RemoveCartServlet extends HttpServlet {
                 
                 if (cart != null) {
                     cart.removeItem(productId);
-                    session.setAttribute("cart", cart); // Ensure session update
+                    session.setAttribute("cart", cart); 
                 }
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
         }
         
-        // Redirect back to cart page (or wherever the request came from)
         String referer = request.getHeader("Referer");
         if (referer != null && !referer.isEmpty()) {
             response.sendRedirect(referer);

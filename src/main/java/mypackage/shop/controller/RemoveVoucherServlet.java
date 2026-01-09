@@ -1,6 +1,3 @@
-/*
- * (Xóa mã giảm giá)
- */
 
 //Author: Hoai
 
@@ -13,13 +10,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
-import java.io.PrintWriter;
 import mypackage.shop.model.Cart;
 
-/**
- *
- * @author PC
- */
 @WebServlet(name = "RemoveVoucherServlet", urlPatterns = {"/cart/remove-voucher"})
 public class RemoveVoucherServlet extends HttpServlet {
 
@@ -30,15 +22,13 @@ public class RemoveVoucherServlet extends HttpServlet {
         Cart cart = (Cart) session.getAttribute("cart");
         
         if (cart != null) {
-            cart.setVoucher(null); // Remove voucher
-            session.setAttribute("cart", cart); // Update session
+            cart.setVoucher(null); 
+            session.setAttribute("cart", cart);
             
-            // Set message
             session.setAttribute("voucherMessage", "Đã hủy mã giảm giá");
             session.setAttribute("voucherStatus", "success");
         } 
         
-        // Redirect back to cart
         response.sendRedirect(request.getContextPath() + "/cart");
     }
 

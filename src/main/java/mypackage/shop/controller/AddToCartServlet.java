@@ -1,6 +1,3 @@
-/*
- * (Xử lý thêm vào giỏ)
- */
 
 //Author: Hoai
 
@@ -19,10 +16,6 @@ import mypackage.shop.model.Cart;
 import mypackage.shop.model.Product;
 import mypackage.shop.model.SessionCartItem;
 
-/**
- *
- * @author PC
- */
 @WebServlet(name = "AddToCartServlet", urlPatterns = {"/cart/add"})
 public class AddToCartServlet extends HttpServlet {
 
@@ -49,11 +42,9 @@ public class AddToCartServlet extends HttpServlet {
     private void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
-        // Get product ID from request parameter
         String productIdParam = request.getParameter("id");
         String quantityParam = request.getParameter("quantity");
         
-        // Validate product ID
         if (productIdParam == null || productIdParam.trim().isEmpty()) {
             HttpSession session = request.getSession();
             session.setAttribute("errorMessage", "Mã sản phẩm không được để trống");
@@ -63,9 +54,8 @@ public class AddToCartServlet extends HttpServlet {
 
         try {
             Integer productId = Integer.parseInt(productIdParam);
-            int quantity = 1; // Default quantity is 1
+            int quantity = 1;
             
-            // Parse quantity if provided
             if (quantityParam != null && !quantityParam.trim().isEmpty()) {
                 try {
                     quantity = Integer.parseInt(quantityParam);
@@ -88,7 +78,6 @@ public class AddToCartServlet extends HttpServlet {
                 return;
             }
 
-            // Get or create cart from session
             HttpSession session = request.getSession();
             Cart cart = (Cart) session.getAttribute("cart");
             
@@ -97,14 +86,11 @@ public class AddToCartServlet extends HttpServlet {
                 session.setAttribute("cart", cart);
             }
 
-            // Create cart item and add to cart
             SessionCartItem cartItem = new SessionCartItem(product, quantity);
             cart.addItem(cartItem);
 
-            // Set success message for session (legacy support)
             session.setAttribute("successMessage", "Đã thêm sản phẩm '" + product.getName() + "' vào giỏ hàng thành công!");
 
-            // Check if it's an AJAX request
             String ajaxParam = request.getParameter("ajax");
             if ("true".equals(ajaxParam)) {
                 response.setContentType("application/json");
@@ -116,12 +102,10 @@ public class AddToCartServlet extends HttpServlet {
                 return;
             }
 
-            // Get referer URL to redirect back to previous page
             String referer = request.getHeader("Referer");
             if (referer != null && !referer.isEmpty()) {
                 response.sendRedirect(referer);
-            } else {
-                // Default redirect to home
+            } else {              
                 response.sendRedirect(request.getContextPath() + "/");
             }
 
@@ -131,7 +115,6 @@ public class AddToCartServlet extends HttpServlet {
             response.sendRedirect(request.getContextPath() + "/");
         } catch (Exception e) {
             e.printStackTrace();
-            // Check if it's an AJAX request
             String ajaxParam = request.getParameter("ajax");
             if ("true".equals(ajaxParam)) {
                response.setContentType("application/json");
@@ -145,7 +128,7 @@ public class AddToCartServlet extends HttpServlet {
 
             HttpSession session = request.getSession();
             session.setAttribute("errorMessage", "Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng: " + e.getMessage());
-            // Try to redirect to referer, otherwise go to home
+
             String referer = request.getHeader("Referer");
             if (referer != null && !referer.isEmpty()) {
                 response.sendRedirect(referer);

@@ -1,6 +1,3 @@
-/*
- * (Lấy list sản phẩm, chi tiết, tìm kiếm, lọc)
- */
 
 //Author: Hoai
 
@@ -56,19 +53,16 @@ public class ProductDAO {
         product.setName(rs.getString("name"));
         product.setDescription(rs.getString("description"));
         
-        // Handle price - convert to BigDecimal
         BigDecimal price = rs.getBigDecimal("price");
         product.setPrice(price != null ? price : BigDecimal.ZERO);
         
         product.setSize(rs.getString("size"));
         product.setColor(rs.getString("color"));
         
-        // Set created_at if exists
         if (rs.getTimestamp("created_at") != null) {
             product.setCreatedAt(rs.getTimestamp("created_at").toLocalDateTime());
         }
 
-        // Set Category if exists
         if (rs.getObject("category_id") != null) {
             Category category = new Category();
             category.setId(rs.getInt("category_id"));
@@ -77,7 +71,6 @@ public class ProductDAO {
             product.setCategory(category);
         }
 
-        // Set Brand if exists
         if (rs.getObject("brand_id") != null) {
             Brand brand = new Brand();
             brand.setId(rs.getInt("brand_id"));

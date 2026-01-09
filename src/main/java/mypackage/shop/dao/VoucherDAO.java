@@ -1,6 +1,3 @@
-/*
- * (Check mã giảm giá)
- */
 
 //Author: Hoai
 

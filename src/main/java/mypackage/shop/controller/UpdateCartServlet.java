@@ -1,6 +1,3 @@
-/*
- * (Tăng giảm số lượng)
- */
 
 //Author: Hoai
 
@@ -45,16 +42,14 @@ public class UpdateCartServlet extends HttpServlet {
 
                 if (cart != null) {
                     cart.updateItemQuantity(productId, quantity);
-                    session.setAttribute("cart", cart); // Ensure session is updated
+                    session.setAttribute("cart", cart);
                 }
 
             } catch (NumberFormatException e) {
-                // Log error or handle silently
                 e.printStackTrace();
             }
         }
-
-        // Redirect back to cart page
+        
         response.sendRedirect(request.getContextPath() + "/cart.jsp");
     }
 }

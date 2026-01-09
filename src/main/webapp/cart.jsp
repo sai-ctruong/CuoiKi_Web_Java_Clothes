@@ -26,12 +26,8 @@
             </head>
 
             <body>
-                <!-- Header Include -->
                 <jsp:include page="includes/header.jsp" />
 
-                <!-- Display Success/Error Messages -->
-                <!-- Display Success/Error Messages -->
-                <!-- Success message removed per user request -->
                 <c:if test="${not empty sessionScope.successMessage}">
                     <c:remove var="successMessage" scope="session" />
                 </c:if>

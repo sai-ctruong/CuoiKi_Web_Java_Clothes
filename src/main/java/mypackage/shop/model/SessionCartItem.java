@@ -1,6 +1,4 @@
-/*
- * Session-based CartItem (simplified version for shopping cart)
- */
+
 //Author: Hoai
 
 package mypackage.shop.model;
